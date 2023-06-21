@@ -159,7 +159,6 @@ function setAccesLevels(dispatch, collapsed){
           }
         });
     }
-    console.log(obj)
     obj.se?
     items.push(se):null;
     obj.setup?

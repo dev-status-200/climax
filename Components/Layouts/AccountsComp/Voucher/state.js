@@ -1,7 +1,5 @@
 import * as yup from "yup"; 
 
-
-
 export const validationSchema = yup.object().shape({
   vType: yup.string().required('VType is required'),
   payTo: yup.string().required('Pay To is required'),
@@ -21,5 +19,3 @@ export const validationSchema = yup.object().shape({
   .required('Voucher Heads is required'),
   // Add validation for other fields as needed
 });
-
-
