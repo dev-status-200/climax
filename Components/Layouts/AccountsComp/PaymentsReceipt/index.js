@@ -6,7 +6,6 @@ import axios from 'axios';
 import BillComp from './BillComp';
 import AgentBillComp from './AgentBillComp';
 import { useSelector } from 'react-redux';
-import Router from "next/router";
 
 const PaymentsReceipt = () => {
 
@@ -60,7 +59,6 @@ const PaymentsReceipt = () => {
                     value={partytype}
                     onChange={(e)=>{
                         setPartyType(e.target.value);
-                        console.log(e.target.value);
                         if(e.target.value=="vendor"){
                             setPayType("Payble");
                         }else if(e.target.value=="client"){
@@ -89,8 +87,7 @@ const PaymentsReceipt = () => {
                     <Radio value={"Payble"}>Payble</Radio>
                     <Radio value={"Recievable"}>Recievable</Radio>
                 </Radio.Group>
-
-                <div className='mt-3' style={basestyle}>On Account</div>
+                <div className='mt-3' style={basestyle}>Currency</div>
                 <Select size='small'
                     disabled={partytype!="agent"?true:false}
                     defaultValue={invoiceCurrency}

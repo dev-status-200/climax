@@ -525,3 +525,7 @@
   -o-transform: scale(1, 3);
   transform: scale(1, 3);
 }
+
+div.rc-virtual-list > div.rc-virtual-list-holder > div > div{
+  width: 200%;
+}

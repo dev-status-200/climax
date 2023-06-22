@@ -117,29 +117,29 @@ const getInvoices = async(id, dispatch, partytype, selectedParty, payType, compa
       let accountData = {};
       if(x.data.status=="success" && x.data.account!=null){
           x.data.account.forEach((z)=>{
-              if(z.Child_Account!=null){
-                  accountData = z;
-              }
+            if(z.Child_Account!=null){
+              accountData = z;
+            }
           })
           temp = temp.map(y=>({
-              ...y,
-              check:false,
-              jobId:y.SE_Job==null?'Old Job':y.SE_Job.jobNo,
-              jobSubType:y.SE_Job==null?'Old':y.SE_Job.subType,
-              ex_rate:y.Charge_Heads[0].ex_rate,
-              receiving:0.00,
-              //inVbalance:(parseFloat(y.total) + parseFloat(y.roundOff)).toFixed(2),
-              inVbalance:partytype=="agent"?
-                ((parseFloat(y.total) / parseFloat(y.Charge_Heads[0].ex_rate)) + parseFloat(y.roundOff)).toFixed(2):
-                (parseFloat(y.total) + parseFloat(y.roundOff)).toFixed(2),
-              remBalance:partytype=="agent"?
-              (payType=="Recievable"?
-                    (parseFloat(y.total)/ parseFloat(y.Charge_Heads[0].ex_rate) - parseFloat(y.recieved==null?0:y.recieved)-parseFloat(y.receiving==null?0:y.receiving)):
-                    (parseFloat(y.total)/ parseFloat(y.Charge_Heads[0].ex_rate) - parseFloat(y.paid==null?0:y.paid)-parseFloat(y.receiving==null?0:y.receiving))):
-              (payType=="Recievable"?
-                (parseFloat(y.total) - parseFloat(y.recieved==null?0:y.recieved)-parseFloat(y.receiving==null?0:y.receiving)):
-                (parseFloat(y.total) - parseFloat(y.paid==null?0:y.paid)-parseFloat(y.receiving==null?0:y.receiving))),
-              //inVbalance:(parseFloat(y.total) + parseFloat(y.roundOff)).toFixed(2)//getNetInvoicesAmount(y.Charge_Heads).localAmount
+            ...y,
+            check:false,
+            jobId:y.SE_Job==null?'Old Job':y.SE_Job.jobNo,
+            jobSubType:y.SE_Job==null?'Old':y.SE_Job.subType,
+            ex_rate:y.Charge_Heads[0].ex_rate,
+            receiving:0.00,
+            //inVbalance:(parseFloat(y.total) + parseFloat(y.roundOff)).toFixed(2),
+            inVbalance:partytype=="agent"?
+              ((parseFloat(y.total) / parseFloat(y.Charge_Heads[0].ex_rate)) + parseFloat(y.roundOff)).toFixed(2):
+              (parseFloat(y.total) + parseFloat(y.roundOff)).toFixed(2),
+            remBalance:partytype=="agent"?
+            (payType=="Recievable"?
+                  (parseFloat(y.total)/ parseFloat(y.Charge_Heads[0].ex_rate) - parseFloat(y.recieved==null?0:y.recieved)-parseFloat(y.receiving==null?0:y.receiving)):
+                  (parseFloat(y.total)/ parseFloat(y.Charge_Heads[0].ex_rate) - parseFloat(y.paid==null?0:y.paid)-parseFloat(y.receiving==null?0:y.receiving))):
+            (payType=="Recievable"?
+              (parseFloat(y.total) - parseFloat(y.recieved==null?0:y.recieved)-parseFloat(y.receiving==null?0:y.receiving)):
+              (parseFloat(y.total) - parseFloat(y.paid==null?0:y.paid)-parseFloat(y.receiving==null?0:y.receiving))),
+            //inVbalance:(parseFloat(y.total) + parseFloat(y.roundOff)).toFixed(2)//getNetInvoicesAmount(y.Charge_Heads).localAmount
           }));
       }
       dispatch({

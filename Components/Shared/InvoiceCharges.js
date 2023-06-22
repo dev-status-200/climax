@@ -5,8 +5,8 @@ import moment from "moment";
 import axios from 'axios';
 import openNotification from '../Shared/Notification';
 import FullScreenLoader from './FullScreenLoader';
-import ports from "/jsonData/ports";
-import inWords from '../../functions/numToWords';
+import InvoicePrint from './InvoicePrint';
+import { Checkbox, Popover } from 'antd';
 
 const InvoiceCharges = ({data, companyId}) => {
 
@@ -28,6 +28,9 @@ const InvoiceCharges = ({data, companyId}) => {
     },
   });
   const [load, setLoad] = useState(false);
+  const [ref, setRef] = useState(false);
+  const [logo, setLogo] = useState(false);
+  const [balance, setBalance] = useState(false);
   
   useEffect(()=>{
     if(Object.keys(data).length>0){
@@ -35,8 +38,6 @@ const InvoiceCharges = ({data, companyId}) => {
         setRecords(data.resultOne.Charge_Heads);
     }
   }, [data])
-
-  const Line = () => <div style={{backgroundColor:"black", height:3, position:'relative', top:12}}></div>
 
   const calculateTotal = (data) => {
     let result = 0;
@@ -222,14 +223,15 @@ const InvoiceCharges = ({data, companyId}) => {
 
     return result
   }
-  const paraStyles = { lineHeight:1.2, fontSize:11 }
-  const heading = { lineHeight:1, fontSize:11, fontWeight:'800', paddingBottom:5 }
 
-  const getPort = (id) => {
-    const index = ports.ports.findIndex(element => element.id == id);
-    return index!=-1?ports.ports[index].name:''
-  }
-  
+  const PrintOptions = (
+    <div className=''>
+        <Checkbox onChange={()=>setRef(!ref)} checked={ref} className='mb-2'>Hide Ref & Sales Rep</Checkbox><br/>
+        <Checkbox onChange={()=>setLogo(!logo)} checked={logo} className='mb-2'>Hide Logo</Checkbox><br/>
+        <Checkbox onChange={()=>setBalance(!balance)} checked={balance} className='mb-2'>Hide Balance</Checkbox><br/>
+        <ReactToPrint content={()=>inputRef} trigger={()=><div className='div-btn-custom text-center p-2'>Go</div>} />
+    </div>
+  )
 
 return (
   <>
@@ -238,7 +240,9 @@ return (
   {Object.keys(data).length>0 &&
   <>
   <div style={{maxWidth:70}}>
-    <ReactToPrint content={()=>inputRef} trigger={()=><div className='div-btn-custom text-center p-2'>Print</div>} />
+  <Popover content={PrintOptions} placement="bottom" title="Printing Options">
+    <div className='div-btn-custom text-center p-2'>Print</div>
+  </Popover>
   </div>
   <Row className='py-3'>
     <Col md={3} className="mb-3">
@@ -281,13 +285,13 @@ return (
         <div>
             <span className='inv-label'>Round Off:</span>
             <span className='inv-value mx-2'>
-                <input className='cur' type={"checkbox"} 
+                <input className='cur' type={"checkbox"}
                 disabled={invoice.type=="Agent Invoice"?true:invoice.type=="Agent Bill"?true:invoice.approved=="1"?true:false} checked={invoice.roundOff!="0"} 
-                onChange={async()=>{
+                onChange={async () => {
                     setLoad(true);
                     let tempInv = {...invoice};
-                    let before = parseFloat(calculateTotal(records))
-                    let after = parseFloat(parseInt(before))
+                    let before = parseFloat(calculateTotal(records));
+                    let after = parseFloat(parseInt(before));
                     let remaining = before - after;
                     if(remaining>0){
                         if(invoice.roundOff=="0"){
@@ -299,17 +303,17 @@ return (
                         }else{
                             tempInv.roundOff = "0"
                         }
-                        await axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_ROUNDOFF_INVOICE,{
+                        await axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_ROUNDOFF_INVOICE, {
                             id:tempInv.id,
                             total:tempInv.total,
                             roundOff:tempInv.roundOff,
                             approved:tempInv.approved
                         }).then((x)=>{
                             if(x.data.status=="success"){
-                                openNotification("Success", "Invoice Successfully Rounded Off!", "green")
-                                setInvoice(tempInv)
+                                openNotification("Success", "Invoice Successfully Rounded Off!", "green");
+                                setInvoice(tempInv);
                             }else{
-                                openNotification("Ops", "An Error Occured!", "red")
+                                openNotification("Ops", "An Error Occured!", "red");
                             }
                         })
                     }
@@ -421,205 +425,8 @@ return (
   <div style={{
         display:"none"
     }}>
-    <div ref={(response) => (inputRef = response)} >
-        {invoice && 
-        <div className='p-5'>
-        <Row>
-            <Col md={4} className='text-center'>
-                <img src={'/seanet-logo.png'} style={{filter: `invert(0.5)`}} height={100} />
-                <div>SHIPPING & LOGISTICS</div>
-            </Col>
-            <Col>
-            <div className='text-center '>
-                <div style={{fontSize:20}}><b>SEA NET SHIPPING & LOGISTICS</b></div>
-                <div style={paraStyles}>House# D-213, DMCHS, Siraj Ud Daula Road, Karachi</div>
-                <div style={paraStyles}>Tel: 9221 34395444-55-66   Fax: 9221 34385001</div>
-                <div style={paraStyles}>Email: info@seanetpk.com   Web: www.seanetpk.com</div>
-                <div style={paraStyles}>NTN # 8271203-5</div>
-            </div>
-            </Col>
-        </Row>
-        <Row>
-            <Col md={5}><Line/></Col>
-            <Col md={2}><p className='text-center fs-15'><strong>{invoice.type}</strong></p></Col>
-            <Col md={5}><Line/></Col>
-        </Row>
-        <Row style={{paddingLeft:12, paddingRight:12}}>
-            <Col md={6} style={{border:'1px solid silver'}} className='p-1'>
-                <div style={heading}>INVOICE TO</div>
-                <div style={paraStyles}>{invoice.SE_Job.Client.name}</div>
-                <div style={paraStyles}>{invoice.SE_Job.Client.address1}</div>
-                <div style={paraStyles}>{invoice.SE_Job.Client.infoMail}</div>
-                <div style={paraStyles}>{invoice.SE_Job.Client.telephone1}</div>
-                <div style={paraStyles}>{invoice.SE_Job.Client.mobile1}</div>
-            </Col>
-            <Col md={6} style={{border:'1px solid silver'}} className='p-1'>
-            <div style={heading}>Shipper/Consignee</div>
-                <div style={paraStyles}>{invoice.SE_Job.consignee.name}</div>
-                <div style={paraStyles}>{invoice.SE_Job.Client.address1}</div>
-                <div style={paraStyles}>{invoice.SE_Job.Client.infoMail}</div>
-                <div style={paraStyles}>{invoice.SE_Job.Client.telephone1}</div>
-                <div style={paraStyles}>{invoice.SE_Job.Client.mobile1}</div>
-            </Col>
-        </Row>
-        <Row style={{paddingLeft:12, paddingRight:12}}>
-            <Col md={6} style={{border:'1px solid silver'}} className='p-1'>
-                <span style={heading}>Reference No.</span>
-                
-            </Col>
-            <Col md={6} style={{border:'1px solid silver'}} className='p-1'>
-                <span style={heading}>Sales Rep</span>
-                <span style={{...paraStyles, paddingLeft:70}}>{invoice.SE_Job.sales_representator.name}</span>
-            </Col>
-        </Row>
-        <Row style={{paddingLeft:12, paddingRight:12}}>
-            <Col md={6} style={{border:'1px solid silver'}} className='p-1'>
-                <Row>
-                    <Col md={7}>
-                        <div style={heading}>MBL No.</div>
-                    </Col>
-                    <Col md={5}>
-                        <div style={heading}>Bill of Lading</div>
-                    </Col>
-                </Row>
-            </Col>
-            <Col md={6} style={{border:'1px solid silver'}} className='p-1'>
-                <Row>
-                    <Col md={7}>
-                        <div style={heading}>Job No</div>
-                        <div style={paraStyles}>{invoice.SE_Job.jobNo}</div>
-                        
-                    </Col>
-                    <Col md={5}>
-                        <div style={heading}>Job Date</div>
-                        <div style={paraStyles}>{moment(invoice.SE_Job.jobDate).format("YYYY-MM-DD")}</div>
-                    </Col>
-                </Row>
-            </Col>
-        </Row>
-        <Row style={{paddingLeft:12, paddingRight:12}}>
-            <Col md={6} style={{border:'1px solid silver'}} className='p-1'>
-                <Row>
-                    <Col md={7}>
-                        <div style={heading}>Port of Loading</div>
-                        <div style={paraStyles}>{getPort(invoice.SE_Job.pol)}</div>
-                    </Col>
-                    <Col md={5}>
-                        <div style={heading}>Port of Discharge</div>
-                        <div style={paraStyles}>{getPort(invoice.SE_Job.pod)}</div>
-                    </Col>
-                </Row>
-            </Col>
-            <Col md={6} style={{border:'1px solid silver'}} className='p-1'>
-                <Row>
-                    <Col md={7}>
-                        <div style={heading}>Destination Port</div>
-                        <div style={paraStyles}>{getPort(invoice.SE_Job.fd)}</div>
-                    </Col>
-                    <Col md={5}>
-                        <div style={heading}>Shipping Line</div>
-                        <div style={paraStyles}>{invoice.SE_Job.shipping_line.name}</div>
-                    </Col>
-                </Row>
-            </Col>
-            <Col md={6} style={{border:'1px solid silver'}} className='p-1'>
-                <Row>
-                    <Col md={4}>
-                        <div style={heading}>Volume</div>
-                        <div style={paraStyles}>{parseFloat(invoice.SE_Job.vol).toFixed(2)}</div>
-                    </Col>
-                    <Col md={4}>
-                        <div style={heading}>Weight</div>
-                        <div style={paraStyles}>{invoice.SE_Job.weight?parseFloat(invoice.SE_Job.weight).toFixed(2):"0.00"}</div>
-                    </Col>
-                    <Col md={4}>
-                        <div style={heading}>PCS</div>
-                        <div style={paraStyles}>{invoice.SE_Job.pcs}</div>
-                    </Col>
-                </Row>
-            </Col>
-            <Col md={6} style={{border:'1px solid silver'}} className='p-1'>
-                <Row>
-                    <Col md={7}>
-                        <div style={heading}>Currency</div>
-                        <div style={paraStyles}>{invoice.type=="Job Invoice"?"PKR":invoice.type=="Job Bill"?"PKR":"USD"}</div>
-                        
-                    </Col>
-                    <Col md={5}>
-                        <div style={heading}>Exchange Rate</div>
-                        <div style={paraStyles}>{records.length>0?records[0].ex_rate:''}</div>
-                    </Col>
-                </Row>
-            </Col>
-        </Row>
-        <div>
-            <Table className='pb-0 mb-0' bordered variant='white' size='sm'>
-            <thead>
-                <tr className='table-heading-center' style={{border:'1px solid silver', backgroundColor:'silver'}}>
-                <th>Sr.</th>
-                <th>Charges</th>
-                <th>Qty</th>
-                <th>Rate</th>
-                <th>Curr</th>
-                <th>Amount</th>
-                <th>Dis</th>  
-                <th>Tax</th>  
-                <th>Total Amount</th>  
-                </tr>
-            </thead>
-            <tbody>
-            {records.map((x, index) => {
-            return (
-            <tr key={index} className='table-row-center-singleLine' style={{border:'1px solid silver', fontSize:11}}>
-                <td className='text-center'>{index + 1}</td>
-                <td className='text-center'>{x.particular}</td>
-                <td className='text-center'>{x.qty}</td>
-                <td className='text-center'>{x.amount}</td>
-                <td className='text-center'>{x.currency}</td>
-                <td className='text-center'>{x.amount}</td>
-                <td className='text-center'>{x.discount}</td>
-                <td className='text-center'>{x.tax_amount}</td>
-                <td className='text-center'>{x.local_amount}</td>
-            </tr>
-                )
-            })}
-            </tbody>
-            </Table>
-            <Row style={{border:'1px solid silver'}} className='mx-0 pt-1'>
-            <Col md={4} style={{fontSize:10}}><b className='fw-8'>Total Discount</b> <span style={{float:'right'}} className='px-3'>0.00</span></Col>
-            <Col md={4} style={{fontSize:10}}><b className='fw-8'>Tax Amount</b>     <span style={{float:'right'}} className='px-3'>0.00</span></Col>
-            <Col md={4} style={{fontSize:10}}>
-                <div><b className='fw-8'>Invoice Total {"("}PKR{")"}</b> <span style={{float:'right'}}>{(calculateTotal(records))}</span></div>
-                <div><b className='fw-8'>Round Off </b> <span style={{float:'right'}} >{invoice.roundOff}</span></div>
-                <div><b className='fw-8'>Total Amount </b> <span style={{float:'right'}} >{(calculateTotal(records))}</span></div>
-            </Col>
-            </Row>
-            <Row className='mx-0'>
-                <Col md={6} className='p-1' style={{border:'1px solid silver', fontSize:12}}>
-                    <b className='fw-8'>Note</b>
-                    <div style={{minHeight:80}}></div>
-                </Col>
-                <Col md={6} className='p-1' style={{border:'1px solid silver', fontSize:12}}>
-                    <b className='fw-8'>In-Words</b>
-                    <p>{invoice.type=="Job Invoice"?"PKR":invoice.type=="Job Bill"?"PKR":"USD"} {inWords(parseFloat(calculateTotal(records)))}</p>
-                </Col>
-            </Row>
-            <Row className='mx-0'>
-                <Col md={6} className='p-1' style={{border:'1px solid silver'}}>
-                    <b className='fw-8' style={{fontSize:12}}>Bank Details</b>
-                    <div>
-                        IBAN: PK08 BAHL 1054 0081 0028 1201<br/>
-                        A/C #: 1054-0081-002182-01-5<br/>
-                        TITLE: SEANET SHIPPING & LOGISTICS<br/>
-                        BANK: BANL AL HABIB LIMITED<br/>
-                        BRANCH: TARIQ ROAD 1054, KARACHI<br/>
-                        SWIFT: BAHLPKKAXXX
-                    </div>
-                </Col>
-            </Row>
-        </div>
-        </div>
-        }
+    <div ref={(response)=>(inputRef=response)}>
+        {invoice && <InvoicePrint records={records} invoice={invoice} calculateTotal={calculateTotal} /> }
     </div>
   </div>
   </div>
