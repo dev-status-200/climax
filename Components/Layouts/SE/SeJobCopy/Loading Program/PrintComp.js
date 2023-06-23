@@ -82,7 +82,7 @@ const PrintComp = ({allValues, state}) => {
             >
               <p>C.V : </p>
               <p style={{ width: "150px", borderBottom: "1px solid" }}>
-                {state.fields.vessel[state.fields.vessel.findIndex((x)=>state.selectedRecord.Voyage.VesselId==x.id)].name}
+                {state.fields.vessel[state.fields?.vessel?.findIndex((x)=>state.selectedRecord?.Voyage?.VesselId==x.id)]?.name}
               </p>
               <p>Voyage : </p>
               <p style={{ width: "100px", borderBottom: "1px solid" }}>
@@ -134,17 +134,19 @@ const PrintComp = ({allValues, state}) => {
                 <Row style={{ position: "relative", left: 10 }}>
                   <Col style={{ maxWidth:"25%", margin:0, borderRight:border, paddingTop:7, paddingBottom:3}} className={`${heading} fs-12`}>
                     <div className="mb-3">
-                      Shipper:<br />{getVales(state.fields.party.shipper[state.fields.party.shipper.findIndex((x)=>x.id==state.selectedRecord.shipperId)].name)} 
+                      Shipper:<br />
+                      {state?.selectedRecord?.shipperId && getVales(state.fields?.party?.shipper[state.fields.party.shipper.findIndex((x)=>x.id==state?.selectedRecord?.shipperId)]?.name)} 
                     </div>
                     <div className="mt-3 mb-1">
-                      Clearing Agent :<br />{getVales(state.fields.vendor.chaChb[state.fields.vendor.chaChb.findIndex((x)=>x.id==state.selectedRecord.customAgentId)].name)}  
+                      Clearing Agent :<br />
+                      {state?.selectedRecord?.customAgentId && getVales(state.fields?.vendor?.chaChb[state.fields.vendor.chaChb.findIndex((x)=>x.id==state?.selectedRecord?.customAgentId)]?.name)}  
                     </div>
                   </Col>
                   <Col style={{ maxWidth:"15%", margin:0, borderRight: border, paddingTop:7, paddingBottom:3}} className={`${heading} fs-12 text-center`}>
                     {state.selectedRecord.pcs} <br /> {state.selectedRecord.pkgUnit}
                   </Col>
                   <Col style={{ maxWidth:"25%", margin:0, borderRight: border, paddingTop:7, paddingBottom:3 }} className={`${heading} fs-12 px-4`}>
-                    {getVales(state.fields.commodity[state.fields.commodity.findIndex((x)=>state.selectedRecord.commodityId==x.id)].name)}
+                    {state?.selectedRecord?.commodityId && getVales(state.fields?.commodity[state.fields.commodity.findIndex((x)=>state.selectedRecord.commodityId==x.id)]?.name)}
                   </Col>
                   <Col style={{ maxWidth:"15%", margin:0, borderRight: border, paddingTop:7, paddingBottom:3 }} className={`${heading} fs-12 px-4`}>
                     {allValues.loadingDate?moment(allValues.loadingDate).format("DD/MM/YYYY"):""}
@@ -176,7 +178,7 @@ const PrintComp = ({allValues, state}) => {
             <div style={{width:"40%"}}>
                 <p className="fs-13"> <i>C.C:</i></p>
                 <br/>
-                <p>{getVales(state.fields.party.shipper[state.fields.party.shipper.findIndex((x)=>x.id==state.selectedRecord.shipperId)].name)}</p>
+                <p>{state?.selectedRecord?.shipperId && getVales(state.fields?.party?.shipper[state.fields.party.shipper.findIndex((x)=>x.id==state.selectedRecord.shipperId)]?.name)}</p>
             </div>
           </div>
         </div>

@@ -251,7 +251,7 @@ const LoadingForm = ({handleSubmit, register, control, onSubmit, state, load, al
           <label className='fs-12'> Custom Clearance</label>
           <div className="d-flex justify-content-between">
             <div style={{border:"1px solid silver", padding:6, width:"100%"}}>
-               {state.fields.vendor.chaChb[state.fields.vendor.chaChb.findIndex((x)=>x.id==state.selectedRecord.customAgentId)].name} 
+               {state?.selectedRecord?.customAgentId && state.fields?.vendor?.chaChb[state.fields.vendor.chaChb.findIndex((x)=>x.id==state.selectedRecord.customAgentId)]?.name} 
             </div>
           </div>
         </div>
@@ -309,7 +309,7 @@ const LoadingForm = ({handleSubmit, register, control, onSubmit, state, load, al
            {load ? <Spinner size='sm'/> : "Save Data"}
         </button>
         <br/>
-        <Popover content={<div><PrintComp allValues={allValues} state={state} /></div>}
+        <Popover content={<div>{(open && allValues.id ) && <PrintComp allValues={allValues} state={state} />}</div>}
           trigger="click"
           open={open}
           onOpenChange={handleOpenChange}
