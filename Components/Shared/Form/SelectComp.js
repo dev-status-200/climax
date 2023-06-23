@@ -45,7 +45,7 @@ const SelectComp = (props) => {
 return(
     <>
     <div>{props.label}</div>
-      <Select disabled={props.disabled} style={{minWidth:props.width, fontSize:props.font}} 
+      <Select disabled={props.disabled} style={{minWidth:props.width, fontSize:props.font}} allowClear
         name={fieldName} onChange={onChange} value={value} ref={ref} onBlur={onBlur} showSearch
         {...props.rest}
       >

@@ -210,25 +210,36 @@ const BookingInfo = ({register, control, errors, state, useWatch, dispatch, rese
         <div className='px-2 pb-2' style={{border:'1px solid silver'}}>
           <Row>
             <Col md={6} className='mt-2'>
-            <div>Weight</div><InputNumber value={getWeight().weight} disabled style={{ color:'black'}} />
+            <div>Weight</div><InputNumber value={getWeight().weight} disabled style={{ color:'black'}} width={"100%"} />
             </Col>
             <Col md={6} className='mt-2'>
-              <InputNumComp register={register} name='bkg' control={control} label='BKG Weight' step={'0.01'} disabled={getStatus(approved)} />
-            </Col>
-            <Col md={12} className='mt-2'>
-            <div>Container</div><InputNumber value={getWeight().qty} disabled style={{minWidth:200, color:'black'}} />
+              <InputNumComp register={register} name='bkg' control={control} width={"100%"} label='BKG Weight' step={'0.01'} disabled={getStatus(approved)} />
             </Col>
             <Col md={6} className='mt-2'>
-              <InputNumComp register={register} name='shpVol' control={control} label='Shp Vol' step={'0.01'} disabled={getStatus(approved)} />
+            <div>Container</div><InputNumber value={getWeight().qty} disabled width={"100%"} />
             </Col>
             <Col md={6} className='mt-2'>
-              <div>TEU</div><InputNumber value={getWeight().teu} disabled style={{ color:'black'}} />
+              <InputNumComp register={register} name='shpVol' control={control} label='Shp Vol' width={"100%"} step={'0.01'} disabled={getStatus(approved)} />
             </Col>
             <Col md={6} className='mt-2'>
-              <InputNumComp register={register} name='vol' control={control} label='Vol' step={'0.00001'} disabled={getStatus(approved)}/>
+              <div>TEU</div><InputNumber value={getWeight().teu} disabled style={{ color:'black'}} width={"100%"} />
             </Col>
             <Col md={6} className='mt-2'>
-              <InputNumComp register={register} name='pcs' control={control}  label='PCS' disabled={getStatus(approved)} />
+              <InputNumComp register={register} name='vol' control={control} label='Vol' width={"100%"} step={'0.00001'} disabled={getStatus(approved)}/>
+            </Col>
+            <Col md={6} className='mt-2'>
+              <InputNumComp register={register} name='pcs' control={control}  label='PCS' width={"100%"} disabled={getStatus(approved)} />
+            </Col>
+            <Col md={6} className='mt-2'>
+              <SelectComp register={register} name='pkgUnit' control={control} label='.' width={"100%"} disabled={getStatus(approved)}
+                options={[  
+                  {"id":"BAGS"   , "name":"BAGS"},
+                  {"id":"BALES"  , "name":"BALES"},
+                  {"id":"BARRELS", "name":"BARRELS"},
+                  {"id":"CARTONS", "name":"CARTONS"},
+                  {"id":"BLOCKS" , "name":"BLOCKS"},
+                  {"id":"BOATS"  , "name":"BOATS"}
+              ]} />
             </Col>
           </Row>
         </div>

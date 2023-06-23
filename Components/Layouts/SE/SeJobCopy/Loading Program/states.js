@@ -47,6 +47,7 @@ export const initialState = {
   values : {
     id:                "",
     localCustom:       "", 
+    wharf:             "", 
     loadingTerminal:   "", 
     dischargeTerminal: "", 
     loadingDate:       "", 
@@ -77,6 +78,7 @@ export const initialState = {
     blRequired:        "", 
     containerWt:       "", 
     containerTemp:     "", 
+    containerPickup:   "", 
     vent:              "", 
     loadingTerms:      "", 
   }

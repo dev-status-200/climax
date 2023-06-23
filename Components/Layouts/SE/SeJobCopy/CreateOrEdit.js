@@ -61,7 +61,6 @@ const CreateOrEdit = ({state, dispatch, baseValues, companyId, jobData}) => {
         dispatch({type:'toggle', fieldName:'equipments', payload:[{id:'', size:'', qty:'', dg:tempState.dg=="Mix"?"DG":tempState.dg, gross:'', teu:''}]});
       }
       dispatch({type:'toggle', fieldName:'exRate', payload:tempState.exRate});
-      console.log({tempState})
       reset(tempState);
     }
     if(!state.edit){ reset(baseValues) }
