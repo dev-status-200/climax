@@ -13,7 +13,6 @@ const SEJobList = ({jobsData, fieldsData}) => {
   useEffect(() => {
     setRecords(jobsData.result);
   }, [])
-
   return (
   <>
     {companyId!='' &&

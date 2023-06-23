@@ -61,6 +61,7 @@ const CreateOrEdit = ({state, dispatch, baseValues, companyId, jobData}) => {
         dispatch({type:'toggle', fieldName:'equipments', payload:[{id:'', size:'', qty:'', dg:tempState.dg=="Mix"?"DG":tempState.dg, gross:'', teu:''}]});
       }
       dispatch({type:'toggle', fieldName:'exRate', payload:tempState.exRate});
+      console.log({tempState})
       reset(tempState);
     }
     if(!state.edit){ reset(baseValues) }
@@ -159,7 +160,6 @@ const CreateOrEdit = ({state, dispatch, baseValues, companyId, jobData}) => {
     if(state.tabState!="6"){ 
       dispatch({type:'toggle', fieldName:'loadingProgram', payload:""}) 
     }
-    console.log(state.tabState)
 
   },[state.tabState])
 
@@ -194,7 +194,7 @@ const CreateOrEdit = ({state, dispatch, baseValues, companyId, jobData}) => {
       }
     {(state.loadingProgram!='') &&
       <Tabs.TabPane tab="Loading Program" key="6">
-        <LoadingProgram state={state} dispatch={dispatch} companyId={companyId}  />
+        <LoadingProgram state={state} dispatch={dispatch} companyId={companyId} jobData={jobData} />
       </Tabs.TabPane>
       }
     </Tabs>
