@@ -13,6 +13,7 @@ import EquipmentInfo from './EquipmentInfo';
 import Routing from './Routing';
 import Invoice from './Invoice';
 import ChargesComp from './ChargesComp/'
+import LoadingProgram from './Loading Program';
 
 const CreateOrEdit = ({state, dispatch, baseValues, companyId, jobData}) => {
 
@@ -20,6 +21,7 @@ const CreateOrEdit = ({state, dispatch, baseValues, companyId, jobData}) => {
     resolver:yupResolver(SignupSchema), defaultValues:state.values
   });
   const subType = useWatch({control, name:"subType"});
+  
 
   useEffect(() => {
     if(state.edit){
@@ -152,6 +154,14 @@ const CreateOrEdit = ({state, dispatch, baseValues, companyId, jobData}) => {
       dispatch({type:'toggle', fieldName:'selectedInvoice', payload:""}) 
     }
   }, [state.tabState])
+  
+  useEffect(() =>{
+    if(state.tabState!="6"){ 
+      dispatch({type:'toggle', fieldName:'loadingProgram', payload:""}) 
+    }
+    console.log(state.tabState)
+
+  },[state.tabState])
 
   const onError = (errors) => console.log(errors);
 
@@ -161,8 +171,8 @@ const CreateOrEdit = ({state, dispatch, baseValues, companyId, jobData}) => {
     <form onSubmit={handleSubmit(state.edit?onEdit:onSubmit, onError)}>
     <Tabs defaultActiveKey={state.tabState} activeKey={state.tabState}
      onChange={(e)=> dispatch({type:'toggle', fieldName:'tabState', payload:e}) }>
-      <Tabs.TabPane tab="Booking Info" key="1">
-       <BookingInfo control={control} register={register} errors={errors} state={state} useWatch={useWatch} dispatch={dispatch} reset={reset}/>
+      <Tabs.TabPane tab="Booking Info" key="1"> 
+       <BookingInfo control={control} register={register} errors={errors} state={state} useWatch={useWatch} dispatch={dispatch} reset={reset}  />   
       </Tabs.TabPane>
       {subType=="FCL" &&
       <Tabs.TabPane tab="Equipment" key="2">
@@ -180,6 +190,11 @@ const CreateOrEdit = ({state, dispatch, baseValues, companyId, jobData}) => {
       {(state.selectedInvoice!='') &&
       <Tabs.TabPane tab="Invoice / Bills" key="5">
         <Invoice state={state} dispatch={dispatch} companyId={companyId} />
+      </Tabs.TabPane>
+      }
+    {(state.loadingProgram!='') &&
+      <Tabs.TabPane tab="Loading Program" key="6">
+        <LoadingProgram state={state} dispatch={dispatch} companyId={companyId}  />
       </Tabs.TabPane>
       }
     </Tabs>

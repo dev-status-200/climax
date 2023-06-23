@@ -127,6 +127,7 @@ const initialState = {
 
   chargesTab:'1',
   selectedInvoice:'',
+  loadingProgram:'',
   invoiceData:{},
   exRate:1.00,
   

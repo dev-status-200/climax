@@ -249,6 +249,12 @@ const BookingInfo = ({register, control, errors, state, useWatch, dispatch, rese
             Router.push(`/seJob/bl/${state.selectedRecord.Bl!=null?state.selectedRecord.Bl.id:"new"}`);
           }}
         >BL</button>
+         <button className='btn-custom px-4'  type='button' 
+          onClick={()=>{
+           dispatch({type:'toggle', fieldName:'loadingProgram', payload:"6"}) ;
+           state.tabState = "6"
+          }}
+        >Loading Program</button>
         </div>
       </Col>
     </Row>
