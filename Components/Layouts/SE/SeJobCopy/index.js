@@ -35,7 +35,6 @@ const SeJob = ({fieldsData, jobData, id}) => {
       })
     }
   }, [])
-
   return (
   <>
     <div className='base-page-layout'>
