@@ -146,17 +146,17 @@ const BookingInfo = ({register, control, errors, state, useWatch, dispatch, rese
     <hr className='my-1' />
     <Row>
       <Col md={3} className=''><Space/>
-        <SelectSearchComp register={register} name='ClientId' control={control} label='Client' disabled={getStatus(approved)} width={"100%"}
+        <SelectSearchComp register={register} name='ClientId' control={control} label='Client *' disabled={getStatus(approved)} width={"100%"}
           options={state.fields.party.client} /><Space/>
-        <SelectSearchComp register={register} name='shipperId' control={control} label='Shipper' disabled={getStatus(approved)} width={"100%"}
+        <SelectSearchComp register={register} name='shipperId' control={control} label='Shipper *' disabled={getStatus(approved)} width={"100%"}
           options={state.fields.party.shipper} /><Space/>
         <SelectSearchComp register={register} name='consigneeId' control={control} label='Consignee' disabled={getStatus(approved)} width={"100%"}
           options={state.fields.party.consignee} /><Space/>
         <SelectSearchComp register={register} name='pol' control={control} label='Port Of Loading' disabled={getStatus(approved)} width={"100%"}
           options={ports.ports} /><Space/>
-        <SelectSearchComp register={register} name='pod' control={control} label='Port Of Discharge' disabled={getStatus(approved)} width={"100%"}
+        <SelectSearchComp register={register} name='pod' control={control} label='Port Of Discharge *' disabled={getStatus(approved)} width={"100%"}
           options={ports.ports} /><Space/>
-        <SelectSearchComp register={register} name='fd' control={control} label='Final Destination' disabled={getStatus(approved)} width={"100%"}
+        <SelectSearchComp register={register} name='fd' control={control} label='Final Destination *' disabled={getStatus(approved)} width={"100%"}
           options={ports.ports} /><Space/>
         <SelectSearchComp register={register} name='forwarderId' control={control} label='Forwarder/Coloader' disabled={getStatus(approved)} width={"100%"}
           options={state.fields.vendor.forwarder} /><Space/>
@@ -169,10 +169,10 @@ const BookingInfo = ({register, control, errors, state, useWatch, dispatch, rese
         <Space/><SelectSearchComp register={register} name='shippingLineId' control={control} label='Sline/Carrier' disabled={getStatus(approved)}options={state.fields.vendor.sLine} width={"100%"} />
         <div className='px-2 pb-2 mt-3' style={{border:'1px solid silver'}}>
         <Space/>
-        <SelectSearchComp register={register} name='vesselId' control={control} label='Vessel'disabled={getStatus(approved)} width={"100%"}
+        <SelectSearchComp register={register} name='vesselId' control={control} label='Vessel *'disabled={getStatus(approved)} width={"100%"}
           options={filterVessels(state.fields.vessel)} 
         />
-          <div className='mt-2'>Voyage</div>
+          <div className='mt-2'>Voyage *</div>
           <div className="dummy-input"
            onClick={()=>{
             vesselId!=''?dispatch({type:'voyageSelection', payload:vesselId}):null
@@ -194,7 +194,7 @@ const BookingInfo = ({register, control, errors, state, useWatch, dispatch, rese
         </div> 
       </Col>
       <Col md={3}><Space/>
-      <SelectSearchComp register={register} name='commodityId' control={control} label='Commodity' disabled={getStatus(approved)} width={"100%"}
+      <SelectSearchComp register={register} name='commodityId' control={control} label='Commodity *' disabled={getStatus(approved)} width={"100%"}
           options={state.fields.commodity} />
           <div className='my-2' />
         <CheckGroupComp register={register} name='transportCheck' control={control} label='' disabled={getStatus(approved)} 
