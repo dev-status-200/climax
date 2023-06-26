@@ -11,7 +11,7 @@ import axios from 'axios';
 import openNotification from '/Components/Shared/Notification';
 
 const SignupSchema = yup.object().shape({
-    code: yup.string().required('Required'),
+    // code: yup.string().required('Required'),
     currency: yup.string().required('Required'),
     name: yup.string().required('Required'),
     short: yup.string().required('Required'),
@@ -41,6 +41,7 @@ const CreateOrEdit = ({state, dispatch, baseValues}) => {
     dispatch({type:'toggle', fieldName:'load', payload:true});
 
     setTimeout(async() => {
+        console.log(data)
         await axios.post(process.env.NEXT_PUBLIC_CLIMAX_CREATE_CHARGE,{
             data
         }).then((x)=>{
@@ -94,11 +95,11 @@ const CreateOrEdit = ({state, dispatch, baseValues}) => {
     <form onSubmit={handleSubmit(state.edit?onEdit:onSubmit, onError)}>
       <Row>
           <Col md={3} className='py-1'>
-              <InputComp register={register} name='code' control={control} label='Code' />
-              {errors.code && <div className='error-line'>{errors.code.message}*</div>}
+              <InputComp register={register} disabled name='code' control={control} label='Code' />
+              {errors.code && <div className='error-line'>{errors.code.message}</div>}
           </Col>
           <Col md={3} className='py-1'>     
-              <SelectComp register={register} name='currency' control={control} label='Currency'
+              <SelectComp register={register} width={100} name='currency' control={control} label='Currency'
                   options={[
                     {id:'PKR', name:'PKR'},
                     {id:'USD', name:'USD'},

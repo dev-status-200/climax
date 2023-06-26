@@ -217,7 +217,7 @@ const Vendor = ({sessionData, representativeData, vendorData}) => {
           onClick={()=>dispatch({type:'edit', payload:x})}
           >
             <td className='blue-txt fw-7'>{x.name}</td>
-            <td>{x.types.split(", ").map((z, i)=>{
+            <td>{x.types?.split(", ").map((z, i)=>{
               return(<div key={i} className="party-types">{z}</div>)
             })}</td>
             <td>

@@ -16,7 +16,7 @@ import { useSelector } from 'react-redux';
 import { createHistory } from './historyCreation';
 
 const SignupSchema = yup.object().shape({
-    code: yup.string().required('Required'),
+    // code: yup.string().required('Required'),
     name: yup.string().required('Required'),
     registerDate: yup.string().required('Required'),
     bankAuthorizeDate: yup.string(),
@@ -144,7 +144,7 @@ const CreateOrEdit = ({state, dispatch, baseValues}) => {
         <Row>
             <Col md={12} className='py-1'>
                 <Col md={3}>
-                <InputComp  register={register} name='code' control={control} label='Code*' />
+                <InputComp disabled  register={register} name='code' control={control} label='Code' />
                 {errors.code && <div className='error-line'>{errors.code.message}*</div>}
                 </Col>
             </Col>
@@ -260,7 +260,7 @@ const CreateOrEdit = ({state, dispatch, baseValues}) => {
                 <DateComp register={register} name='bankAuthorizeDate' control={control} label='Bank Authorize Date' />
             </Col>
             <Col md={3} className='py-1'>     
-                <SelectComp register={register} name='authorizedById' control={control} label='Authorized By:'
+                <SelectComp width={100} register={register} name='authorizedById' control={control} label='Authorized By:'
                     options={state.Representatives[0].records} />
             </Col>
             <div style={{height:185}}></div>
@@ -269,19 +269,19 @@ const CreateOrEdit = ({state, dispatch, baseValues}) => {
         <Tabs.TabPane tab="Account Info" key="3">
         <Row>
             <Col md={12} className='py-1'>     
-                <SelectComp register={register} name='accountRepresentatorId' control={control} label='Account Representative:'
+                <SelectComp width={100} register={register} name='accountRepresentatorId' control={control} label='Account Representative:'
                     options={state.Representatives[0].records} />
             </Col>
-            <Col md={12} className='py-1'>     
-                <SelectComp register={register} name='docRepresentatorId' control={control} label='Doc Representative:'
+            <Col  md={12} className='py-1'>     
+                <SelectComp width={100} register={register} name='docRepresentatorId' control={control} label='Doc Representative:'
                     options={state.Representatives[1].records} />
             </Col>
             <Col md={12} className='py-1'>     
-                <SelectComp register={register} name='salesRepresentatorId' control={control} label='Sales Representative:'
+                <SelectComp width={100} register={register} name='salesRepresentatorId' control={control} label='Sales Representative:'
                     options={state.Representatives[2].records} />
             </Col>
             <Col md={12} className='py-1'>     
-                <SelectComp register={register} name='currency' control={control} label='Currency'
+                <SelectComp width={100} register={register} name='currency' control={control} label='Currency'
                     options={[  
                         {id:'USD', name:'USD'},
                         {id:'PKR', name:'PKR'},

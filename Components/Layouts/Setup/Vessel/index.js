@@ -92,13 +92,12 @@ const Vessel = ({VesselData}) => {
               <th>Type</th>
               <th>Port Of Loading</th>
               <th>Destinations</th>
-              <th>Modify</th>
             </tr>
           </thead>
           <tbody>
           {records.map((x, index) => {
             return (
-            <tr key={index} className='f'>
+            <tr key={index} className='f row-hov' onClick={()=>dispatch({type:'edit', payload:x})}>
               <td className='blue-txt'><strong>{x.carrier}</strong></td>
               <td><strong>{x.name}</strong></td>
               <td className='grey-txt'>{x.voyage}</td>
@@ -119,11 +118,7 @@ const Vessel = ({VesselData}) => {
               </td>
               <td> <BiCurrentLocation className='mb-1 mx-1 blue-txt'/>{x.loading}</td>
               <td> <TbMap2 className='mb-1 mx-1 blue-txt' size={20} />{x.destinations}</td>
-              <td>
-                <span>
-                  <EditOutlined className='modify-edit' onClick={()=>dispatch({type:'edit', payload:x})}/>
-                </span>
-              </td>
+              
             </tr>
             )
           })}

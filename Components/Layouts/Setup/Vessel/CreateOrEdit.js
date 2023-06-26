@@ -15,10 +15,10 @@ const CreateOrEdit = ({state, dispatch, baseValues}) => {
 
     const SignupSchema = yup.object().shape({
         name: yup.string().required('Required'),
-        code: yup.string().required('Required'),
+        // code: yup.string().required('Required'),
         carrier: yup.string().required('Required'),
         type: yup.string().required('Atleast Check 1'),
-        loading: yup.string().required('Atleast Check 1'),
+        // loading: yup.string().required('Atleast Check 1'),
     });
 
     const { register, control, handleSubmit, reset, formState: { errors } } = useForm({
@@ -47,7 +47,8 @@ const CreateOrEdit = ({state, dispatch, baseValues}) => {
     ]
 
     const onSubmit = async(data) => {
-        if(state.destinations.length>0){
+        // if(state.destinations.length>0){
+    // }
         data.destinations = state.destinations.join(', ')
         dispatch({type:'toggle', fieldName:'load', payload:true});
         setTimeout(async() => {             
@@ -70,7 +71,7 @@ const CreateOrEdit = ({state, dispatch, baseValues}) => {
                 });
             })
          }, 2000);
-        }
+        
     };
     
     const onEdit = async(data) => {
@@ -113,8 +114,8 @@ const CreateOrEdit = ({state, dispatch, baseValues}) => {
                 {errors.name && <div className='error-line'>{errors.name.message}*</div>}
             </Col>
             <Col md={3} className='py-1'>
-                <InputComp  register={register} name='code' control={control} label='Code' />
-                {errors.code && <div className='error-line'>{errors.code.message}*</div>}
+                <InputComp  register={register} disabled name='code' control={control} label='Code' />
+                {errors.code && <div className='error-line'>{errors.code.message}</div>}
             </Col>
             <Col md={7}>
                 <SelectComp register={register} name='carrier' control={control} label='Carriers' width={300}
