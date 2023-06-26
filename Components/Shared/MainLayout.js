@@ -23,7 +23,6 @@ const MainLayout = ({children}) => {
   const tabs = useSelector((state) => state.tabs.value);
   const dispatch = useDispatch();
   useEffect(() => { getCompanies(); }, [])
-  //useEffect(() => { console.log(levels); }, [levels])
 
   async function getCompanies(){
     await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_ALL_COMPANIES)
@@ -202,7 +201,7 @@ return (
     <Sider trigger={null} collapsible collapsed={collapsed} style={{maxHeight:'100vh', overflowY:'auto'}}>
       <div className={!collapsed?'big-logo':'small-logo'} >
         <span>
-          <img src={company=='1'?'/seanet-logo.png':company=='2'?'aircargo-logo.png':company=='3'?'cargolinkers-logo.png':null}/>
+          <img src={company=='1'?'/seanet-logo.png':company=='3'?'/aircargo-logo.png':company=='2'?'/cargolinkers-logo.png':null}/>
           <p>Dashboard</p>
         </span>
       </div>
