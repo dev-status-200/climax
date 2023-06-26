@@ -96,22 +96,16 @@ const LoadingForm = ({handleSubmit, register, control, onSubmit, state, load, al
             <DateComp register={register} name="gatePassDate" control={control} width="100%" />
           </div>
         </div>
-
         <div className="fs-12 d-flex justify-content-between mt-1">
           <div style={{ width: "40%" }}>
             <label> CRO Issue Date </label>
-            <DateComp
-              register={register}
-              name="croIssueDate"
-              control={control}
-            />
+            <DateComp register={register} name="croIssueDate" control={control} />
           </div>
           <div style={{ width: "50%" }}>
             <label> Letter </label>
             <InputComp register={register} name="letter" control={control} width="70%" />
           </div>
         </div>
-
         <div className="fs-12 d-flex justify-content-between mt-1">
           <div style={{ width: "40%" }}>
             <label> Expiry Date </label>

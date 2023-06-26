@@ -296,20 +296,20 @@ const BlPrint = ({allValues, state, borders, heading, border, inputRef, stamps, 
           <Col md={6}><span className="fw-7 px-5"><b>B/L NO: {allValues.hbl}</b></span></Col>
         </Row>
         <Row style={{ fontFamily: "serif", paddingTop: 33 }} className='px-4'>
-          {state.marksContentTwo.length>35 && 
+          {state.marksContentTwo?.length>35 &&
           <Col md={4} className="fs-11">
               <p className="bl-print mb-2" style={{  borderBottom: border }}>MARKS & CONTAINER NO {"(Continued)"}</p>
               <div className="bl-print" style={{color:'black'}}>{parse(state.marksContentTwo)}</div>
           </Col>
           }
-          {state.descOfGoodsContentTwo.length>35 &&
+          {state.descOfGoodsContentTwo?.length>35 &&
           <Col md={4} className="fs-11">
               <p className="bl-print mb-2" style={{  borderBottom: border }}>DESCRIPTION {"(Continued)"}</p>
               <div className="bl-print" style={{color:'black'}}>{parse(state.descOfGoodsContentTwo)}</div>
           </Col>
           }
         </Row>
-        {(!containerData &&  state?.Container_Infos.length>4) &&
+        {(!containerData && state.Container_Infos?.length>4) &&
         <Row style={{ fontFamily: "serif", paddingTop: 33 }} className='px-4'>
           <Col md={4} className="bl-print" style={{marginTop: "60px"}} >
             <p className="bl-print mb-2" style={{  borderBottom: border }}>CONTAINER NO .SIZE SEAL</p>

@@ -204,7 +204,7 @@ const Client = ({sessionData, representativeData, clientData}) => {
             <td >Name: <span className='blue-txt fw-7'>{x.name}</span></td>
             <td> {x.person1} {x.mobile1}<br/> {x.person2} {x.mobile2}<br/> </td>
             <td> {x.telephone1}<br/>{x.telephone2}</td>
-            <td> {x.address1.slice(0,30)}<br/> {x.address2.slice(0,30)}<br/> </td>
+            <td> {x.address1?.slice(0,30)}<br/> {x.address2?.slice(0,30)}<br/> </td>
             <td>
               Created By: <span className='blue-txt fw-5'>{x.createdBy}</span> <br/>
               <span className='' style={{position:'relative', top:2}}>Load History</span>

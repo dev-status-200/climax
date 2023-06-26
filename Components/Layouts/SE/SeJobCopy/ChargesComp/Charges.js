@@ -54,32 +54,42 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
         <Col style={{maxWidth:150}} className="">
         <div className='div-btn-custom text-center py-1'
             onClick={()=>{
-            append({
-                type:type, description:'', basis:'', 
-                new:true,  ex_rate: parseFloat(state.exRate), pp_cc:state.selectedRecord.freightType=="Prepaid"?'PP':'CC', 
-                local_amount: 0,  size_type:'40HC', dg_type:state.selectedRecord.dg=="Mix"?"DG":state.selectedRecord.dg, 
-                qty:1, currency:'USD', amount:0, check: false, bill_invoice: '', charge: '', particular: '',
-                discount:0, tax_apply:false, taxPerc:0.00, tax_amount:0, net_amount:0, invoiceType:"", name: "", 
-                partyId:"", sep:false, status:'', approved_by:'', approval_date:'', InvoiceId:null, 
-                SEJobId:state.selectedRecord.id
-            })}}
+            if(!state.chargeLoad){
+                append({
+                    type:type, description:'', basis:'', 
+                    new:true,  ex_rate: parseFloat(state.exRate), pp_cc:state.selectedRecord.freightType=="Prepaid"?'PP':'CC', 
+                    local_amount: 0,  size_type:'40HC', dg_type:state.selectedRecord.dg=="Mix"?"DG":state.selectedRecord.dg, 
+                    qty:1, currency:'USD', amount:0, check: false, bill_invoice: '', charge: '', particular: '',
+                    discount:0, tax_apply:false, taxPerc:0.00, tax_amount:0, net_amount:0, invoiceType:"", name: "", 
+                    partyId:"", sep:false, status:'', approved_by:'', approval_date:'', InvoiceId:null, 
+                    SEJobId:state.selectedRecord.id
+                })}}
+            }
         >Add Charge</div>
         </Col>
         <Col>
         <div className='div-btn-custom text-center mx-0 py-1 px-3' style={{float:'right'}} 
             onClick={async()=>{
-                await calculate();
-                await saveHeads(chargeList, state, dispatch);
-                await reset({chargeList:[]})
-                getHeadsNew(state.selectedRecord.id, dispatch);
+                if(!state.chargeLoad){
+                    dispatch({type:'toggle', fieldName:'chargeLoad', payload:true})
+                    await calculate();
+                    await saveHeads(chargeList, state, dispatch);
+                    await reset({chargeList:[]})
+                    await getHeadsNew(state.selectedRecord.id, dispatch);
+                }
             }}
         >Save</div>
         <div className='div-btn-custom-green text-center py-1 mx-2 px-3' style={{float:'right'}}
             onClick={async()=>{
-                let status = await makeInvoice(chargeList, companyId);
-                if(status=="success"){
-                    await reset({chargeList:[]})
-                    getHeadsNew(state.selectedRecord.id, dispatch);
+                if(!state.chargeLoad){
+                    dispatch({type:'toggle', fieldName:'chargeLoad', payload:true})
+                    let status = await makeInvoice(chargeList, companyId);
+                    if(status=="success"){
+                        await reset({chargeList:[]})
+                        await getHeadsNew(state.selectedRecord.id, dispatch);
+                    }else{
+                        dispatch({type:'toggle', fieldName:'chargeLoad', payload:false})
+                    }
                 }
             }}
         >Generate Invoice No</div>

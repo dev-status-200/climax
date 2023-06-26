@@ -221,7 +221,7 @@ const getHeads = async(id) => {
 }
 
 const saveHeads = async(charges, state, dispatch) => {
-  dispatch({type:'toggle', fieldName:'chargeLoad', payload:true})
+  //dispatch({type:'toggle', fieldName:'chargeLoad', payload:true})
   await axios.post(process.env.NEXT_PUBLIC_CLIMAX_SAVE_SE_HEADS_NEW, 
     {
       charges, 
@@ -236,7 +236,7 @@ const saveHeads = async(charges, state, dispatch) => {
 }
 
 const getHeadsNew = async(id, dispatch) => {
-  dispatch({type:'toggle', fieldName:'chargeLoad', payload:true})
+  //dispatch({type:'toggle', fieldName:'chargeLoad', payload:true})
   let paybleCharges = [];
   let reciveableCharges = [];
   await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_SE_HEADS_NEW,{
@@ -317,7 +317,6 @@ const calculateChargeHeadsTotal = (chageHeads, type) => {
 const makeInvoice = async(list, companyId) => {
   let status = "";
   let tempList = list.filter((x)=>x.check);
-  //console.log(tempList);
   if(tempList.length>0){
     await axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_CREATE_INVOICE_NEW,{
       chargeList:tempList, companyId

@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux';
 const ChargesComp = ({state, dispatch}) => {
   const companyId = useSelector((state) => state.company.value);
   useEffect(() => {
+    dispatch({type:'toggle', fieldName:'chargeLoad', payload:true})
     getHeadsNew(state.selectedRecord.id, dispatch);
   }, [state.selectedRecord])
 

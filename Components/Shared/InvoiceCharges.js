@@ -33,6 +33,7 @@ const InvoiceCharges = ({data, companyId}) => {
   const [balance, setBalance] = useState(false);
   
   useEffect(()=>{
+    console.log(data)
     if(Object.keys(data).length>0){
         setInvoice(data.resultOne);
         setRecords(data.resultOne.Charge_Heads);
