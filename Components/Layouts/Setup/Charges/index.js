@@ -92,7 +92,6 @@ const Charges = ({chargeData}) => {
             <th>Calculation Type</th>
             <th>Default Payble</th>
             <th>Default Receivable</th>
-            <th>Modify</th>
           </tr>
         </thead>
         <tbody>
@@ -108,7 +107,7 @@ const Charges = ({chargeData}) => {
             }
         }).map((x, index) => {
           return (
-          <tr key={index} className='f'>
+          <tr key={index} className='f row-hov' onClick={()=>dispatch({type:'edit', payload:x})}>
             <td>{x.code}</td>
             <td>{x.currency}</td>
             <td>{x.name}</td>
@@ -116,7 +115,6 @@ const Charges = ({chargeData}) => {
             <td>{x.calculationType}</td>
             <td>{x.defaultPaybleParty}</td>
             <td>{x.defaultRecivableParty}</td>
-            <td> <span> <EditOutlined className='modify-edit' onClick={()=>dispatch({type:'edit', payload:x})}/> </span> </td>
           </tr>
           )
         })}

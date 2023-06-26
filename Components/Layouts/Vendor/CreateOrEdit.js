@@ -16,7 +16,7 @@ import { useSelector } from 'react-redux';
 import { createHistory } from './historyCreation';
 
 const SignupSchema = yup.object().shape({
-    code: yup.string().required('Required'),
+    // code: yup.string().required('Required'),
     name: yup.string().required('Required'),
     registerDate: yup.string().required('Required'),
     bankAuthorizeDate: yup.string(),
@@ -122,7 +122,7 @@ const CreateOrEdit = ({state, dispatch, baseValues}) => {
         <Row>
             <Col md={12} className='py-1'>
                 <Col md={3}>
-                <InputComp  register={register} name='code' control={control} label='Code' />
+                <InputComp disabled register={register} name='code' control={control} label='Code' />
                 {errors.code && <div className='error-line'>{errors.code.message}*</div>}
                 </Col>
             </Col>

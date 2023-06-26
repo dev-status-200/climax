@@ -43,14 +43,14 @@ const BlInfo = ({control, id, register, state, useWatch, dispatch, reset}) => {
         <Col md={3}>
             <Row>
                 <Col md={10}>
-                <div className="" style={{lineHeight:1.35}}>Job No.</div>
+                <div className="" style={{lineHeight:1.35}}>Job No. *</div>
                 <div className='dummy-input' onClick={()=>{id=="new"?fetchJobsData(set, dispatch):null}}>
                     {allValues.jobNo}
                 </div>
                 </Col>
                 <Col md={12}>
                     <div className='mt-2'></div>
-                    <InputComp register={register} name='hbl' control={control} label='HBL #' width={150} />
+                    <InputComp register={register} name='hbl' control={control} label='HBL # *' width={150} />
                 </Col>
                 <Col md={12}>
                     <div className='mt-2'></div>
@@ -126,11 +126,11 @@ const BlInfo = ({control, id, register, state, useWatch, dispatch, reset}) => {
         <Col md={3} className=''>
             <Row className='pt-1'>
                 <Col md={12}>
-                <div className="" style={{lineHeight:1.35}}>Shipper</div>
+                <div className="" style={{lineHeight:1.35}}>Shipper *</div>
                 <div className='dummy-input'>{allValues.shipper}</div>
                 </Col>
                 <Col md={12}>
-                <div className="mt-2" style={{lineHeight:1.35}}>Consignee</div>
+                <div className="mt-2" style={{lineHeight:1.35}}>Consignee *</div>
                 <div className='dummy-input'>{allValues.consignee}</div>
                 </Col>
                 <Col md={12}>
@@ -140,7 +140,7 @@ const BlInfo = ({control, id, register, state, useWatch, dispatch, reset}) => {
                     {/* <SelectSearchComp register={register} name='notifyPartyTwoId' control={control} label='Notify Party #2' width={'100%'}
                         options={state.partiesData}
                     /> */}
-                    <div className='mt-2'>Notify Party #1</div>
+                    <div className='mt-2'>Notify Party #1 *</div>
                     <Select style={{minWidth:'100%'}}
                         onChange={(e)=>{
                             let tempState = {...allValues};
@@ -174,7 +174,7 @@ const BlInfo = ({control, id, register, state, useWatch, dispatch, reset}) => {
                             ((option?.code) ?? '').toLowerCase().includes(input.toLowerCase())
                         }
                     />
-                    <div className="mt-2" style={{lineHeight:1.35}}>Vessel</div>
+                    <div className="mt-2" style={{lineHeight:1.35}}>Vessel *</div>
                     <div className='dummy-input'>{allValues.vessel}</div>
 
                     <div className="mt-2" style={{lineHeight:1.35}}>Shipment Date</div>

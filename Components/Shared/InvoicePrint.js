@@ -22,7 +22,7 @@ const InvoicePrint = ({records, invoice, calculateTotal}) => {
     const paraStyles = { lineHeight:1.2, fontSize:11 }
     const heading = { lineHeight:1, fontSize:11, fontWeight:'800', paddingBottom:5 };
     const Line = () => <div style={{backgroundColor:"black", height:3, position:'relative', top:12}}></div>
-    const border = "1px solid silver";
+    const border = "1px solid black";
 
     useEffect(() => { console.log(invoice); }, [])
 
@@ -170,7 +170,7 @@ const InvoicePrint = ({records, invoice, calculateTotal}) => {
       <>
         <Table className='pb-0 mb-0' bordered variant='white' size='sm'>
         <thead className='p-0 m-0'>
-            <tr className='p-0 m-0' style={{border:'1px solid silver', backgroundColor:'silver', fontSize:9, color:"black"}}>
+            <tr className='p-0 m-0' style={{border:'1px solid black', backgroundColor:'silver', fontSize:9, color:"black"}}>
             <td className='p-0 text-center fw-6'>Sr.         </td>
             <td className='p-0 text-center fw-6'>Charges     </td>
             <td className='p-0 text-center fw-6'>Qty         </td>
@@ -185,7 +185,7 @@ const InvoicePrint = ({records, invoice, calculateTotal}) => {
         <tbody>
         {records.map((x, index) => {
         return (
-        <tr key={index} className='table-row-center-singleLine' style={{border:'1px solid silver', fontSize:9}}>
+        <tr key={index} className='table-row-center-singleLine' style={{border:'1px solid black', fontSize:9}}>
             <td className='text-center p-0'>{index + 1}</td>
             <td className='text-center p-0'>{x.particular}</td>
             <td className='text-center p-0'>{x.qty}</td>

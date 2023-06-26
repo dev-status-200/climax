@@ -284,7 +284,7 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
             <td style={{ padding: 3 }}>{/* QTY */}
                 <InputNumComp register={register} name={`chargeList.${index}.qty`} control={control} width={30} font={13} disabled={permissions.admin?false:x.InvoiceId!=null?true:false}/>
             </td> 
-            <td style={{ padding: 3 }}> {/* Currency */}
+            <td style={{ padding: 3 }} > {/* Currency */}
                 <SelectSearchComp register={register} name={`chargeList.${index}.currency`} control={control} width={100} font={13} disabled={permissions.admin?false:x.InvoiceId!=null?true:false}
                     options={[
                         { id: 'PKR', name: 'PKR' },
