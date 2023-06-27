@@ -257,7 +257,7 @@ const BlPrint = ({allValues, state, borders, heading, border, inputRef, stamps, 
         <Row style={{ paddingLeft: 37, paddingRight: 37, fontFamily:"serif"}}>
           <Col style={{ margin: 0, borderBottom: border, borderLeft: border, borderRight: border, maxWidth: "46%"}}>
             <div className={`${heading} fs-12`}>For Delivery Please Apply to: </div>
-            <div style={{fontSize:12, lineHeight:1}}><b>{parse(state.deliveryContent)}</b></div>
+            <div style={{fontSize:12, lineHeight:0.1}}><b>{parse(state.deliveryContent)}</b></div>
           </Col>
           <Col style={{ margin:0, borderRight: border, borderBottom: border, borderLeft: "none", maxWidth: "54%", paddingLeft: 1, paddingRight: 1, paddingTop: 0, paddingBottom: 5}}>
             <Row style={{ position:"relative", left:10 }}>

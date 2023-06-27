@@ -99,7 +99,6 @@ const AccountActivity = () => {
             <Col md={4}>
               <div>Debit Account</div>
               <Select
-                
                 showSearch
                 style={{ width: '100%' }}
                 placeholder="Debit Account"

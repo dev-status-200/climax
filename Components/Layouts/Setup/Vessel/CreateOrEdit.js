@@ -16,7 +16,7 @@ const CreateOrEdit = ({state, dispatch, baseValues}) => {
     const SignupSchema = yup.object().shape({
         name: yup.string().required('Required'),
         // code: yup.string().required('Required'),
-        carrier: yup.string().required('Required'),
+        //carrier: yup.string().required('Required'),
         type: yup.string().required('Atleast Check 1'),
         // loading: yup.string().required('Atleast Check 1'),
     });
@@ -120,7 +120,6 @@ const CreateOrEdit = ({state, dispatch, baseValues}) => {
             <Col md={7}>
                 <SelectComp register={register} name='carrier' control={control} label='Carriers' width={300}
                     options = {carriers}/>
-                    {errors.carrier && <div className='error-line'>{errors.carrier.message}*</div>}
             </Col>
             <Col md={7} className='py-1'>
                 <RadioComp register={register} name='type' control={control} label='Types'

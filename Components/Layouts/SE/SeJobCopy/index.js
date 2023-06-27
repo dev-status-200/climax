@@ -36,22 +36,7 @@ const SeJob = ({fieldsData, jobData, id}) => {
         }
       })
     }
-
-
   }, [])
-
-  useEffect(() =>{
-    const req = async() => {
-
-      const result = await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_IVOICES_TYPES, {headers:{id : state.selectedRecord?.id}})
-      dispatch({type:'set', payload :{
-      invoiceData : result.data.result
-
-      }})
-    } 
-    req()
-    
-  }, [state.selectedRecord.id])
   
   return (
   <>

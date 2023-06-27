@@ -142,6 +142,31 @@ const BookingInfo = ({register, control, errors, state, useWatch, dispatch, rese
             {id:'B2B', name:'B2B'},
         ]} />
       </Col>
+      <Col md={2} className='py-1'>
+        <SelectComp register={register} name='incoTerms' control={control} label='Inco Terms' width={"100%"} disabled={getStatus(approved)}
+          options={[  
+            {id:'EXW', name:'EXW'},
+            {id:'FCP', name:'FCP'},
+            {id:'FAS', name:'FAS'},
+            {id:'FOB', name:'FOB'},
+            {id:'CFR', name:'CFR'},
+            {id:'CIF', name:'CIF'},
+            {id:'CIP', name:'CIP'},
+            {id:'CPT', name:'CPT'},
+            {id:'DAP', name:'DAP'},
+            {id:'DPU', name:'DPU'},
+            {id:'DDP', name:'DDP'},
+            {id:'CNI', name:'CNI'},
+            {id:'DTP', name:'DTP'},
+            {id:'DPP', name:'DPP'},
+            {id:'DAT', name:'DAT'},
+            {id:'DDU', name:'DDU'},
+            {id:'DES', name:'DES'},
+            {id:'DEQ', name:'DEQ'},
+            {id:'DAF', name:'DAF'},
+            {id:'CNF', name:'CNF'},
+        ]} />
+      </Col>
     </Row>
     <hr className='my-1' />
     <Row>
@@ -175,7 +200,9 @@ const BookingInfo = ({register, control, errors, state, useWatch, dispatch, rese
           <div className='mt-2'>Voyage *</div>
           <div className="dummy-input"
            onClick={()=>{
-            vesselId!=''?dispatch({type:'voyageSelection', payload:vesselId}):null
+            if(vesselId!=''){
+              dispatch({type:'voyageSelection', payload:vesselId})
+            }
           }}
           >{getVoyageNumber(VoyageId)}</div>
         <div className='my-2'></div>
@@ -259,29 +286,24 @@ const BookingInfo = ({register, control, errors, state, useWatch, dispatch, rese
             }));
             Router.push(`/seJob/bl/${state.selectedRecord.Bl!=null?state.selectedRecord.Bl.id:"new"}`);
           }}
-        >BL</button>
-            <Popover
-            content={<ul style={{display:"flex", flexDirection:"column", listStyle:"none", gap:"0.8rem", alignItems:"flex-start", justifyContent:"center"}}>
-             
-               {state.invoiceData.length > 0 && state.invoiceData.map((x) => 
-               (
-               <li className='text-center'>
-                    <Tag color="geekblue" style={{ fontSize: 15, cursor: "pointer" }}
-                        onClick={() => {
-                            dispatch({
-                                type: 'set',
-                                payload: { selectedInvoice: x.id, tabState: "5" }
-                            })
-                        }}
-                    >{x.invoice_No}</Tag>
- 
-                 </li>
-                 )
-               )}
-              </ul>}>
-      <button type="button" className="btn-custom mt-1" style={{width:"100px"}}>Invoices</button>
-    </Popover>
-
+        >BL
+        </button>
+        <Popover
+        content={
+          <>{state.InvoiceList?.map((x) => 
+            (<div className='my-1'>
+              <Tag color="geekblue" style={{fontSize:15, cursor:"pointer", width:130, textAlign:'center'}}
+                onClick={()=>{
+                dispatch({ type:'set',
+                  payload:{ selectedInvoice:x.invoice_No, tabState:"5" }
+                })
+              }}>
+                {x.invoice_No}
+              </Tag>
+            </div>))}
+          </>}>
+          <button type="button" className="btn-custom">Invoice/Bills {`(${state.InvoiceList.length})`}</button>
+        </Popover>
          <button className='btn-custom px-4'  type='button' 
           onClick={()=>{
            dispatch({type:'toggle', fieldName:'loadingProgram', payload:"6"}) ;
@@ -291,7 +313,6 @@ const BookingInfo = ({register, control, errors, state, useWatch, dispatch, rese
         </div>
       </Col>
     </Row>
-
     {(state.voyageVisible && approved[0]!="1") && 
       <CustomBoxSelect reset={reset} useWatch={useWatch} control={control} state={state} dispatch={dispatch}/>
     }

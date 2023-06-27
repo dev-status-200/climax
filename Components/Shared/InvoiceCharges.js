@@ -424,7 +424,7 @@ return (
   }
   {/* Printing Component */}
   <div style={{
-        display:"none"
+        //display:"none"
     }}>
     <div ref={(response)=>(inputRef=response)}>
         {invoice && <InvoicePrint records={records} invoice={invoice} calculateTotal={calculateTotal} /> }

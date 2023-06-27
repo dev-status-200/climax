@@ -6,6 +6,10 @@ import inWords from '../../functions/numToWords';
 
 const InvoicePrint = ({records, invoice, calculateTotal}) => {
     
+    useEffect(() => {
+      console.log(invoice)
+    }, [])
+
     const getPort = (id) => {
         const index = ports.ports.findIndex(element => element.id == id);
         let value = "";
@@ -81,9 +85,11 @@ const InvoicePrint = ({records, invoice, calculateTotal}) => {
             <Row>
                 <Col md={7}>
                     <div style={heading}>MBL No.</div>
+                    <div style={paraStyles}>{invoice.SE_Job?.Bl?.mbl}</div>
                 </Col>
                 <Col md={5}>
                     <div style={heading}>Bill of Lading</div>
+                    <div style={paraStyles}>{invoice.SE_Job?.Bl?.hbl}</div>
                 </Col>
             </Row>
         </Col>
@@ -96,7 +102,34 @@ const InvoicePrint = ({records, invoice, calculateTotal}) => {
                 </Col>
                 <Col md={5}>
                     <div style={heading}>Job Date</div>
-                    <div style={paraStyles}>{moment(invoice.SE_Job.jobDate).format("YYYY-MM-DD")}</div>
+                    <div style={paraStyles}>{moment(invoice.SE_Job.jobDate).format("DD-MMM-YYYY")}</div>
+                </Col>
+            </Row>
+        </Col>
+    </Row>
+    <Row style={{paddingLeft:12, paddingRight:12}}>
+        <Col md={6} style={{borderRight:border, borderLeft:border, borderBottom:border}} className='p-1'>
+            <Row>
+                <Col md={7}>
+                    <div style={heading}>Vessel / Voyage</div>
+                    <div style={paraStyles}>{invoice.SE_Job?.vessel?.name} / {invoice.SE_Job?.Voyage?.voyage}</div>
+                </Col>
+                <Col md={5}>
+                    <div style={heading}>Sailing Date</div>
+                    <div style={paraStyles}>{moment(invoice.SE_Job?.Voyage?.exportSailDate).format("DD-MMM-YYYY")}</div>
+                </Col>
+            </Row>
+        </Col>
+        <Col md={6} style={{borderRight:border, borderBottom:border}} className='p-1'>
+            <Row>
+                <Col md={7}>
+                    <div style={heading}>Invoice No</div>
+                    <div style={paraStyles}>{invoice.invoice_No}</div>
+                    
+                </Col>
+                <Col md={5}>
+                    <div style={heading}>Invoice Date</div>
+                    <div style={paraStyles}>{moment(invoice.createdAt).format("DD-MMM-YYYY")}</div>
                 </Col>
             </Row>
         </Col>

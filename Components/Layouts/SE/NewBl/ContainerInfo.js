@@ -60,6 +60,51 @@ const ContainerInfo = ({control, register, state, useWatch, dispatch, reset}) =>
     {label:'CARTONS', value:'CARTONS'},
     {label:'BLOCKS', value:'BLOCKS'},
     {label:'BOATS', value:'BOATS'},
+    {label:'BOBBIN', value:'BOBBIN'},
+    {label:'BOTTLES', value:'BOTTLES'},
+    {label:'BOXES', value:'BOXES'},
+    {label:'BRIQUETTES', value:'BRIQUETTES'},
+    {label:'BUNDLES', value:'BUNDLES'},
+    {label:'CABLE DRUM', value:'CABLE DRUM'},
+    {label:'CANS', value:'CANS'},
+    {label:'CARBOY', value:'CARBOY'},
+    {label:'CARTONS', value:'CARTONS'},
+    {label:'CASE', value:'CASE'},
+    {label:'CASKS', value:'CASKS'},
+    {label:'COILS', value:'COILS'},
+    {label:'COLLI', value:'COLLI'},
+    {label:'CRATES', value:'CRATES'},
+    {label:'CYLINDERS', value:'CYLINDERS'},
+    {label:'DOZENS', value:'DOZENS'},
+    {label:'DRUMS', value:'DRUMS'},
+    {label:'FUBRE DRUMS', value:'FUBRE DRUMS'},
+    {label:'ITEMS', value:'ITEMS'},
+    {label:'JOTTAS', value:'JOTTAS'},
+    {label:'KEGS', value:'KEGS'},
+    {label:'LOOSE', value:'LOOSE'},
+    {label:'METAL DRUMS', value:'METAL DRUMS'},
+    {label:'METERS', value:'METERS'},
+    {label:'MODULES', value:'MODULES'},
+    {label:'PACKETS', value:'PACKETS'},
+    {label:'PACKAGES', value:'PACKAGES'},
+    {label:'PAILS', value:'PAILS'},
+    {label:'PALLETS', value:'PALLETS'},
+    {label:'PARCELS', value:'PARCELS'},
+    {label:'PIECES', value:'PIECES'},
+    {label:'PLASTIC DRUMS', value:'PLASTIC DRUMS'},
+    {label:'REELS', value:'REELS'},
+    {label:'ROLLS', value:'ROLLS'},
+    {label:'SACKS', value:'SACKS'},
+    {label:'SETS', value:'SETS'},
+    {label:'SHEETS', value:'SHEETS'},
+    {label:'SKIDS', value:'SKIDS'},
+    {label:'SLABS', value:'SLABS'},
+    {label:'STEEL PACKAGES', value:'STEEL PACKAGES'},
+    {label:'STEEL PLATES', value:'STEEL PLATES'},
+    {label:'STEEL TRUNKS', value:'STEEL TRUNKS'},
+    {label:'TES CHESTS', value:'TES CHESTS'},
+    {label:'TONS', value:'TONS'},
+    {label:'UNIT', value:'UNIT'}
   ]
   const loadType = [
     {label:'FULL', value:'FULL'},
@@ -170,7 +215,7 @@ return (
     <td className='p-0'><Select value={x.wtUnit}     style={{width: 90   }} size='small' onChange={(e)=>onChange(e,i,'wtUnit','e'  )} options={weightUnit}/></td>
     <td className='p-0'><InputNumber value={x.cbm}   style={{width: 80   }} size='small' onChange={(e)=>onChange(e,i,'cbm','e'  )} min="0.00"/></td>
     <td className='p-0'><InputNumber value={x.pkgs}  style={{width:'100%'}} size='small' onChange={(e)=>onChange(e,i,'pkgs','e')}  min="0.00"/></td>
-    <td className='p-0'><Select value={x.unit}       style={{width: 100  }} size='small' onChange={(e)=>onChange(e,i,'unit','e'    )} options={PackagrUnits}/></td>
+    <td className='p-0'><Select value={x.unit}       style={{width: 200  }} size='small' onChange={(e)=>onChange(e,i,'unit','e'    )} options={PackagrUnits} showSearch allowClear /></td>
     <td className='p-0'><Input  value={x.temp}       style={{width:'100%'}} size='small' onChange={(e)=>onChange(e,i,'temp'        )}    /></td>
     <td className='p-0'><Select value={x.loadType}   style={{width:'100%'}} size='small' onChange={(e)=>onChange(e,i,'loadType','e')}options={loadType}/></td>
     <td className='p-0'><Input  value={x.remarks}    style={{width: 200  }} size='small' onChange={(e)=>onChange(e,i,'remarks'     )}    /></td>

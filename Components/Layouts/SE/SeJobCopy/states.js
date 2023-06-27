@@ -42,6 +42,7 @@ const baseValues = {
   shipDate:'',
   freightType:'',
   nomination:'',
+  incoTerms:'',
   ClientId:'',
   shipperId:'',
   consigneeId:'',
@@ -107,6 +108,7 @@ const initialState = {
   popShow:false,
   viewHistory:false,
   invoiceData : [],
+  InvoiceList : [],
 
   paybleCharges:[],
   reciveableCharges:[],
@@ -328,10 +330,21 @@ const makeInvoice = async(list, companyId) => {
   return status
 }
 
+const getInvoices = async(id, dispatch) => {
+  let result = [];
+  await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_IVOICES_TYPES, 
+    {headers:{id:id}
+  }).then((x)=>{
+    result = x.data.status=="success"? x.data.result : [];
+    dispatch({type:'set', payload:{"InvoiceList":result}})
+  })
+  //return result;
+} 
+
 export {
   recordsReducer, initialState, baseValues,
   SignupSchema, getClients, getVendors,
   getHeads, saveHeads, getHeadsNew,
   calculateChargeHeadsTotal,
-  makeInvoice
+  makeInvoice, getInvoices
 };

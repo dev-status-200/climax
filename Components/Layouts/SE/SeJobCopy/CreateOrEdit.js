@@ -7,7 +7,7 @@ import moment from 'moment';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import openNotification from '/Components/Shared/Notification';
-import { SignupSchema } from './states';
+import { SignupSchema, getInvoices } from './states';
 import BookingInfo from './BookingInfo';
 import EquipmentInfo from './EquipmentInfo';
 import Routing from './Routing';
@@ -21,15 +21,12 @@ const CreateOrEdit = ({state, dispatch, baseValues, companyId, jobData}) => {
     resolver:yupResolver(SignupSchema), defaultValues:state.values
   });
   const subType = useWatch({control, name:"subType"});
-  
- 
 
   useEffect(() => {
     if(state.edit){
       let tempState = {...jobData};
       let tempVoyageList = [...state.voyageList];
-      tempVoyageList.length>0?null:tempVoyageList.push(tempState.Voyage)
-      dispatch({type:'toggle', fieldName:'voyageList', payload:tempVoyageList});
+      tempVoyageList.length>0?null:tempVoyageList.push(tempState.Voyage);
       tempState = { ...tempState,
         customCheck: tempState.customCheck!==""?tempState.customCheck.split(", "):"",
         transportCheck:tempState.transportCheck!==""?tempState.transportCheck.split(", "):"",// tempState.transportCheck.split(", "),
@@ -54,14 +51,20 @@ const CreateOrEdit = ({state, dispatch, baseValues, companyId, jobData}) => {
         vgmCutOffDate:tempState.vgmCutOffDate==""?"":moment(tempState.vgmCutOffDate),
         vgmCutOffTime:tempState.vgmCutOffTime==""?"":moment(tempState.vgmCutOffTime)
       }
+      let tempEquipments = []
       if(tempState.SE_Equipments.length>0){
         let tempEquips = tempState.SE_Equipments;
         tempEquips.push({id:'', size:'', qty:'', dg:tempState.dg=="Mix"?"DG":tempState.dg, gross:'', teu:''})
-        dispatch({type:'toggle', fieldName:'equipments', payload:tempState.SE_Equipments});
+        tempEquipments = tempState.SE_Equipments
       }else{
-        dispatch({type:'toggle', fieldName:'equipments', payload:[{id:'', size:'', qty:'', dg:tempState.dg=="Mix"?"DG":tempState.dg, gross:'', teu:''}]});
+        tempEquipments = [{id:'', size:'', qty:'', dg:tempState.dg=="Mix"?"DG":tempState.dg, gross:'', teu:''}]
       }
-      dispatch({type:'toggle', fieldName:'exRate', payload:tempState.exRate});
+      dispatch({type:"set",payload:{
+        exRate:tempState.exRate,
+        equipments:tempEquipments,
+        voyageList:tempVoyageList
+      }})
+      getInvoices(tempState.id, dispatch)
       reset(tempState);
     }
     if(!state.edit){ reset(baseValues) }
@@ -71,7 +74,6 @@ const CreateOrEdit = ({state, dispatch, baseValues, companyId, jobData}) => {
     data.equipments = state.equipments
     data.customAgentId = data.customCheck.length>0?data.customAgentId:null;
     data.transporterId = data.transportCheck.length>0?data.transporterId:null;
-
     data.VoyageId = data.VoyageId!=""?data.VoyageId:null;
     data.ClientId = data.ClientId!=""?data.ClientId:null;
     data.shippingLineId = data.shippingLineId!=""?data.shippingLineId:null;
@@ -91,14 +93,14 @@ const CreateOrEdit = ({state, dispatch, baseValues, companyId, jobData}) => {
     dispatch({type:'toggle', fieldName:'load', payload:true});
     setTimeout(async() => {
         await axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_CREATE_SEAJOB,{
-            data
+          data
         }).then((x)=>{
-            if(x.data.status=='success'){
-                openNotification('Success', `Job Created!`, 'green')
-            }else{
-                openNotification('Error', `An Error occured Please Try Again!`, 'red')
-            }
-            dispatch({type:'toggle', fieldName:'load', payload:false});
+          if(x.data.status=='success'){
+              openNotification('Success', `Job Created!`, 'green');
+          }else{
+              openNotification('Error', `An Error occured Please Try Again!`, 'red')
+          }
+          dispatch({type:'toggle', fieldName:'load', payload:false});
         })
     }, 3000);
   };
@@ -121,47 +123,18 @@ const CreateOrEdit = ({state, dispatch, baseValues, companyId, jobData}) => {
     data.shippingLineId = data.shippingLineId!=""?data.shippingLineId:null;
     data.approved = data.approved[0]=="1"?true:false;
     data.companyId = companyId;
-
-    // data.equipments = state.equipments;
-    // data.VoyageId = data.VoyageId!=""?data.VoyageId:null;
-    // data.customAgentId = data.customCheck.length>0?data.customAgentId:null;
-    // data.transporterId = data.transportCheck.length>0?data.transporterId:null;
-    // data.shippingLineId = data.shippingLineId!=""?data.shippingLineId:null;
-    // data.shippingLineId = data.shippingLineId!=""?data.shippingLineId:null;
-    // data.approved = data.approved[0]=="1"?true:false;
-    // data.companyId = companyId
     dispatch({type:'toggle', fieldName:'load', payload:true});
     setTimeout(async() => {
         await axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_EDIT_SEAJOB,{data}).then((x)=>{
-            if(x.data.status=='success'){
-                // let tempRecords = [...state.records];
-                // let i = tempRecords.findIndex((y=>data.id==y.id));
-                // console.log(x.data.result)
-                // tempRecords[i] = x.data.result;
-                // dispatch({type:'toggle', fieldName:'records', payload:tempRecords});
-                // dispatch({type:'modalOff'});
-                // reset(baseValues)
-                openNotification('Success', `Job Updated!`, 'green')
-            }else{
-                openNotification('Error', `An Error occured Please Try Again!`, 'red')
-            }
-            dispatch({type:'toggle', fieldName:'load', payload:false});
+          if(x.data.status=='success'){
+              openNotification('Success', `Job Updated!`, 'green')
+          }else{
+              openNotification('Error', `An Error occured Please Try Again!`, 'red')
+          }
+          dispatch({type:'toggle', fieldName:'load', payload:false});
         })
     }, 3000);
   };
-
-  useEffect(() => {
-    if(state.tabState!="5"){ 
-      dispatch({type:'toggle', fieldName:'selectedInvoice', payload:""}) 
-    }
-  }, [state.tabState])
-  
-  useEffect(() =>{
-    if(state.tabState!="6"){ 
-      dispatch({type:'toggle', fieldName:'loadingProgram', payload:""}) 
-    }
-
-  },[state.tabState])
 
   const onError = (errors) => console.log(errors);
 

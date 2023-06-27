@@ -50,7 +50,7 @@ const BlInfo = ({control, id, register, state, useWatch, dispatch, reset}) => {
                 </Col>
                 <Col md={12}>
                     <div className='mt-2'></div>
-                    <InputComp register={register} name='hbl' control={control} label='HBL # *' width={150} />
+                    <InputComp register={register} name='hbl' control={control} label='HBL # *' width={150} disabled={true} />
                 </Col>
                 <Col md={12}>
                     <div className='mt-2'></div>
