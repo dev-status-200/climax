@@ -106,6 +106,7 @@ const initialState = {
   edit:false,
   popShow:false,
   viewHistory:false,
+  invoiceData : [],
 
   paybleCharges:[],
   reciveableCharges:[],

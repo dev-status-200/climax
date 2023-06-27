@@ -22,6 +22,7 @@ const CreateOrEdit = ({state, dispatch, baseValues, companyId, jobData}) => {
   });
   const subType = useWatch({control, name:"subType"});
   
+ 
 
   useEffect(() => {
     if(state.edit){

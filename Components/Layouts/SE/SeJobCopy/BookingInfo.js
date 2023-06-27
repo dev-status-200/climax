@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Popover, InputNumber } from "antd";
+import { Popover, InputNumber, Tag } from "antd";
 import SelectComp from '/Components/Shared/Form/SelectComp';
 import SelectSearchComp from '/Components/Shared/Form/SelectSearchComp';
 import DateComp from '/Components/Shared/Form/DateComp';
@@ -249,7 +249,7 @@ const BookingInfo = ({register, control, errors, state, useWatch, dispatch, rese
         {approved=="1" && <img src={'/approve.png'} height={100} />}
         <CheckGroupComp register={register}name='approved'control={control}label='_____________________' options={[{label:"Approve Job",value:"1"}]}/>
         <hr/>
-        <div>
+        <div style={{display:"flex", flexWrap:"wrap", gap:"0.8rem"}}>
         <button className='btn-custom px-4' type="button"
           onClick={()=>{
              dispatchNew(incrementTab({
@@ -260,6 +260,28 @@ const BookingInfo = ({register, control, errors, state, useWatch, dispatch, rese
             Router.push(`/seJob/bl/${state.selectedRecord.Bl!=null?state.selectedRecord.Bl.id:"new"}`);
           }}
         >BL</button>
+            <Popover
+            content={<ul style={{display:"flex", flexDirection:"column", listStyle:"none", gap:"0.8rem", alignItems:"flex-start", justifyContent:"center"}}>
+             
+               {state.invoiceData.length > 0 && state.invoiceData.map((x) => 
+               (
+               <li className='text-center'>
+                    <Tag color="geekblue" style={{ fontSize: 15, cursor: "pointer" }}
+                        onClick={() => {
+                            dispatch({
+                                type: 'set',
+                                payload: { selectedInvoice: x.id, tabState: "5" }
+                            })
+                        }}
+                    >{x.invoice_No}</Tag>
+ 
+                 </li>
+                 )
+               )}
+              </ul>}>
+      <button type="button" className="btn-custom mt-1" style={{width:"100px"}}>Invoices</button>
+    </Popover>
+
          <button className='btn-custom px-4'  type='button' 
           onClick={()=>{
            dispatch({type:'toggle', fieldName:'loadingProgram', payload:"6"}) ;

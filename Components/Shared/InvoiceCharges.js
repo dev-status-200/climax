@@ -35,7 +35,7 @@ const InvoiceCharges = ({data, companyId}) => {
   useEffect(()=>{
     if(Object.keys(data).length>0){
         setInvoice(data.resultOne);
-        setRecords(data.resultOne.Charge_Heads);
+        setRecords(data.resultOne?.Charge_Heads);
     }
   }, [data])
 

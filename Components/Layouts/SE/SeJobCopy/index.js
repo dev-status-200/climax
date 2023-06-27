@@ -4,12 +4,14 @@ import CreateOrEdit from './CreateOrEdit';
 import { useSelector, useDispatch } from 'react-redux';
 import { appendValue } from '/redux/seJobValues/seJobValuesSlice';
 import Cookies from "js-cookie";
+import axios from 'axios';
 
 const SeJob = ({fieldsData, jobData, id}) => {
   const companyId = useSelector((state) => state.company.value);
   const seJobValues = useSelector((state) => state.seJobValues.values);
   const tabs = useSelector((state) => state.tabs.value);
   const [ state, dispatch ] = useReducer(recordsReducer, initialState);
+
   const dispatchRedux = useDispatch();
 
   useEffect(() => {
@@ -34,7 +36,23 @@ const SeJob = ({fieldsData, jobData, id}) => {
         }
       })
     }
+
+
   }, [])
+
+  useEffect(() =>{
+    const req = async() => {
+
+      const result = await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_IVOICES_TYPES, {headers:{id : state.selectedRecord?.id}})
+      dispatch({type:'set', payload :{
+      invoiceData : result.data.result
+
+      }})
+    } 
+    req()
+    
+  }, [state.selectedRecord.id])
+  
   return (
   <>
     <div className='base-page-layout'>
