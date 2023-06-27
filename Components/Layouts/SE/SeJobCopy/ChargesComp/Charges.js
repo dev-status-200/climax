@@ -14,7 +14,7 @@ import { saveHeads, calculateChargeHeadsTotal, makeInvoice, getHeadsNew } from "
 const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, control, register, companyId}) => {
 
     const { permissions } = state;
-
+    
     const [ selection, setSelection ] = useState({
         partyId:null,
         InvoiceId:null
@@ -93,11 +93,9 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
                 }
             }}
         >Generate Invoice No</div>
-        
         <div className='mx-2' style={{float:'right'}}>
         <InputNumber placeholder='Ex.Rate' size='small' className='my-1' min={"0.1"}  style={{position:'relative', bottom:2}}
-            value={state.exRate} 
-            onChange={(e)=>dispatch({type:'toggle',fieldName:'exRate',payload:e})} 
+            value={state.exRate} onChange={(e)=>dispatch({type:'toggle',fieldName:'exRate',payload:e})} 
         />
         </div>
         <div className='my-1' style={{float:'right'}}>Ex.Rate</div>
@@ -140,17 +138,17 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
             <td className='text-center'>
                 <CloseCircleOutlined className='cross-icon' style={{ position: 'relative', bottom: 3 }}
                     onClick={() => {
-                        if(permissions.admin || x.new){
-                            PopConfirm("Confirmation", "Are You Sure To Remove This Charge?",
-                            () => {
-                                let tempState = [...chargeList];
-                                let tempDeleteList = [...state.deleteList];
-                                tempDeleteList.push(tempState[index].id);
-                                tempState.splice(index, 1);
-                                reset({ chargeList: tempState });
-                                dispatch({ type: 'toggle', fieldName: 'deleteList', payload: tempDeleteList });
-                            })
-                        }
+                    if((x.Invoice==null || x.Invoice?.status==null) && (permissions.admin || x.new )){
+                        PopConfirm("Confirmation", "Are You Sure To Remove This Charge?",
+                        () => {
+                            let tempState = [...chargeList];
+                            let tempDeleteList = [...state.deleteList];
+                            tempDeleteList.push(tempState[index].id);
+                            tempState.splice(index, 1);
+                            reset({ chargeList: tempState });
+                            dispatch({ type: 'toggle', fieldName: 'deleteList', payload: tempDeleteList });
+                        })
+                      }
                     }}
                 />
             </td>
@@ -175,84 +173,79 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
             </td>
             <td style={{ padding: 3, minWidth: 100 }}> {/* charge selection */}
                 <Select className='table-dropdown' showSearch value={x.charge} style={{ paddingLeft: 0 }}
-                    disabled={permissions.admin?false:x.InvoiceId!=null?true:false}
-                    onChange={(e) => {
-                        let tempChargeList = [...chargeList];
-                        state.fields.chargeList.forEach(async (y, i) => {
-                            if (y.code == e) {
-                                // tempChargeList[index].charge = e;
-                                // tempChargeList[index].particular = y.name;
-                                // tempChargeList[index].basis = y.calculationType;
-                                // tempChargeList[index].taxPerc = y.taxApply == "Yes" ? parseFloat(y.taxPerc) : 0.00;
-                                tempChargeList[index] = {
-                                    ...tempChargeList[index],
-                                    charge: e,
-                                    particular: y.name,
-                                    basis: y.calculationType,
-                                    taxPerc: y.taxApply == "Yes" ? parseFloat(y.taxPerc) : 0.00
-                                }
-                                let partyType = "";
-                                let choiceArr = ['', 'defaultRecivableParty', 'defaultPaybleParty'];// 0=null, 1=recivable, 2=payble
-                                partyType = y[choiceArr[parseInt(state.chargesTab)]];
-                                let searchPartyId;
-                                switch (partyType) {
-                                    case "Client":
-                                        searchPartyId = state.selectedRecord.ClientId;
-                                        break;
-                                    case "Local-Agent":
-                                        searchPartyId = state.selectedRecord.localVendorId;
-                                        break;
-                                    case "Custom-Agent":
-                                        searchPartyId = state.selectedRecord.customAgentId;
-                                        break;
-                                    case "Transport-Agent":
-                                        searchPartyId = state.selectedRecord.transporterId;
-                                        break;
-                                    case "Forwarding-Agent":
-                                        searchPartyId = state.selectedRecord.forwarderId;
-                                        break;
-                                    case "Overseas-Agent":
-                                        searchPartyId = state.selectedRecord.overseasAgentId;
-                                        break;
-                                    case "Shipping-Line":
-                                        searchPartyId = state.selectedRecord.shippingLineId;
-                                        break;
-                                    default:
-                                        searchPartyId = state.selectedRecord.localVendorId;
-                                        break;
-                                }
-                                // if (partyType == "Client") {
-                                //     searchPartyId = state.selectedRecord.ClientId;
-                                // } else if (partyType == "Local-Agent") {
-                                //     searchPartyId = state.selectedRecord.localVendorId;
-                                // } else if (partyType == "Custom-Agent") {
-                                //     searchPartyId = state.selectedRecord.customAgentId;
-                                // } else if (partyType == "Transport-Agent") {
-                                //     searchPartyId = state.selectedRecord.transporterId;
-                                // } else if (partyType == "Forwarding-Agent") {
-                                //     searchPartyId = state.selectedRecord.forwarderId;
-                                // } else if (partyType == "Overseas-Agent") {
-                                //     searchPartyId = state.selectedRecord.overseasAgentId;
-                                // } else if (partyType == "Shipping-Line") {
-                                //     searchPartyId = state.selectedRecord.shippingLineId;
-                                // }
-                                let partyData = partyType == "Client" ? await getClients(searchPartyId) : await getVendors(searchPartyId);
-                                if (state.chargesTab == '1') {
-                                    tempChargeList[index].invoiceType = partyData[0].types.includes("Overseas Agent") ? "Agent Bill" : "Job Invoice";
-                                } else {
-                                    tempChargeList[index].invoiceType = partyData[0].types.includes("Overseas Agent") ? "Agent Invoice" : "Job Bill";
-                                }
-                                tempChargeList[index].name = partyData[0].name;
-                                tempChargeList[index].partyId = partyData[0].id;
-                                tempChargeList[index].partyType = partyType == "Client" ? "client" : "vendor";
-                                reset({ chargeList: tempChargeList })
-                            }
-                        })
-                        //calculate(index, chargeList[index].amount, chargeList[index].discount, chargeList[index].tax_apply, "No", chargeList[index].ex_rate, chargeList[index].qty)
-                    }}
-                    optionFilterProp="children"
-                    filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
-                    options={state.fields.chargeList}
+                disabled={permissions.admin?false:x.InvoiceId!=null?true:false}
+                onChange={(e) => {
+                    let tempChargeList = [...chargeList];
+                    state.fields.chargeList.forEach(async (y, i) => {
+                    if (y.code == e) {
+                        tempChargeList[index] = {
+                            ...tempChargeList[index],
+                            charge: e,
+                            particular: y.name,
+                            basis: y.calculationType,
+                            taxPerc: y.taxApply == "Yes" ? parseFloat(y.taxPerc) : 0.00
+                        }
+                        let partyType = "";
+                        let choiceArr = ['', 'defaultRecivableParty', 'defaultPaybleParty'];// 0=null, 1=recivable, 2=payble
+                        partyType = y[choiceArr[parseInt(state.chargesTab)]];
+                        let searchPartyId;
+                        switch (partyType) {
+                            case "Client":
+                                searchPartyId = state.selectedRecord.ClientId;
+                                break;
+                            case "Local-Agent":
+                                searchPartyId = state.selectedRecord.localVendorId;
+                                break;
+                            case "Custom-Agent":
+                                searchPartyId = state.selectedRecord.customAgentId;
+                                break;
+                            case "Transport-Agent":
+                                searchPartyId = state.selectedRecord.transporterId;
+                                break;
+                            case "Forwarding-Agent":
+                                searchPartyId = state.selectedRecord.forwarderId;
+                                break;
+                            case "Overseas-Agent":
+                                searchPartyId = state.selectedRecord.overseasAgentId;
+                                break;
+                            case "Shipping-Line":
+                                searchPartyId = state.selectedRecord.shippingLineId;
+                                break;
+                            default:
+                                searchPartyId = state.selectedRecord.localVendorId;
+                                break;
+                        }
+                        // if (partyType == "Client") {
+                        //     searchPartyId = state.selectedRecord.ClientId;
+                        // } else if (partyType == "Local-Agent") {
+                        //     searchPartyId = state.selectedRecord.localVendorId;
+                        // } else if (partyType == "Custom-Agent") {
+                        //     searchPartyId = state.selectedRecord.customAgentId;
+                        // } else if (partyType == "Transport-Agent") {
+                        //     searchPartyId = state.selectedRecord.transporterId;
+                        // } else if (partyType == "Forwarding-Agent") {
+                        //     searchPartyId = state.selectedRecord.forwarderId;
+                        // } else if (partyType == "Overseas-Agent") {
+                        //     searchPartyId = state.selectedRecord.overseasAgentId;
+                        // } else if (partyType == "Shipping-Line") {
+                        //     searchPartyId = state.selectedRecord.shippingLineId;
+                        // }
+                        let partyData = partyType == "Client" ? await getClients(searchPartyId) : await getVendors(searchPartyId);
+                        if (state.chargesTab == '1') {
+                            tempChargeList[index].invoiceType = partyData[0].types.includes("Overseas Agent") ? "Agent Bill" : "Job Invoice";
+                        } else {
+                            tempChargeList[index].invoiceType = partyData[0].types.includes("Overseas Agent") ? "Agent Invoice" : "Job Bill";
+                        }
+                        tempChargeList[index].name = partyData[0].name;
+                        tempChargeList[index].partyId = partyData[0].id;
+                        tempChargeList[index].partyType = partyType == "Client" ? "client" : "vendor";
+                        reset({ chargeList: tempChargeList })
+                    }
+                    })
+                }}
+                optionFilterProp="children"
+                filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
+                options={state.fields.chargeList}
                 />
             </td>
             <td>{x.particular}</td>
@@ -311,14 +304,12 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
             </td>
             <td>{x.local_amount}</td>
             <td className='text-center'>{/* Party Selection */}
-                <div className=''>
                     {x.new == true && <RightCircleOutlined style={{ position: 'relative', bottom: 3 }}
                         onClick={() => {
                             dispatch({ type: 'set', payload: { headIndex: index, headVisible: true } }); //<--Identifies the Head with there Index sent to modal
                         }}
                     />
                     }{x.name != "" ? <span className='m-2 '><Tag color="geekblue" style={{ fontSize: 15 }}>{x.name}</Tag></span> : ""}
-                </div>
             </td>
             <td>Un-Approved</td><td></td><td></td>
         </tr>
