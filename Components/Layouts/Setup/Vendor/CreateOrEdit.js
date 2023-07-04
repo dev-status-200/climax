@@ -3,23 +3,24 @@ import { Tabs } from "antd";
 import { useForm, useWatch, useFormContext } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import InputComp from '../../Shared/Form/InputComp';
-import SelectComp from '../../Shared/Form/SelectComp';
-import DateComp from '../../Shared/Form/DateComp';
-import CheckGroupComp from '../../Shared/Form/CheckGroupComp';
+import InputComp from '/Components/Shared/Form/InputComp';
+import SelectComp from '/Components/Shared/Form/SelectComp';
+import DateComp from '/Components/Shared/Form/DateComp';
+import CheckGroupComp from '/Components/Shared/Form/CheckGroupComp';
 import { Row, Col, Spinner } from 'react-bootstrap';
 import moment from 'moment';
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import openNotification from '../../Shared/Notification';
+import openNotification from '/Components/Shared/Notification';
 import { useSelector } from 'react-redux';
 import { createHistory } from './historyCreation';
+import Router from 'next/router';
 
 const SignupSchema = yup.object().shape({
     // code: yup.string().required('Required'),
     name: yup.string().required('Required'),
-    registerDate: yup.string().required('Required'),
-    bankAuthorizeDate: yup.string(),
+    //registerDate: yup.string().required('Required'),
+    //bankAuthorizeDate: yup.string(),
     person1: yup.string().required('Required'),
     //person2: yup.string().required('Required'),
     mobile1:yup.string().min(11, 'Must be 11 Digits!').max(11, 'Must be 11 Digits!').required('Required'),
@@ -38,29 +39,26 @@ const SignupSchema = yup.object().shape({
     operations: yup.array().required('Atleast 1 Operation Required!').min(1, "Atleast 1 Operation Required!"),
 });
 
-const CreateOrEdit = ({state, dispatch, baseValues}) => {
-  
-    const company = useSelector((state) => state.company.companies);
+const CreateOrEdit = ({state, dispatch, baseValues, vendorData, id}) => {
+
     const { register, control, handleSubmit, reset, formState: { errors } } = useForm({
         resolver: yupResolver(SignupSchema),
         defaultValues:state.values
     });
-    const { oldRecord, Representatives } = state;
 
     useEffect(() => {
-        if(state.edit){
-            let tempState = {...state.selectedRecord};
+        if(id!=="new"){
+            let tempState = {...vendorData};
             tempState.operations = tempState.operations.split(', ');
             tempState.types = tempState.types.split(', ');
             tempState.registerDate = moment(tempState.registerDate);
             tempState.bankAuthorizeDate = moment(tempState.bankAuthorizeDate);
             tempState.companies = [1,2,3];
-
-            dispatch({type:'toggle', fieldName:'oldRecord', payload:tempState});
+            //dispatch({type:'toggle', fieldName:'oldRecord', payload:tempState});
             reset(tempState);
         }
-        if(!state.edit){ reset(baseValues) }
-    }, [state.selectedRecord])
+        if(id==="new"){ reset(baseValues) }
+    }, [])
 
     const onSubmit = async(data) => {
         let Username = Cookies.get('username')
@@ -71,12 +69,8 @@ const CreateOrEdit = ({state, dispatch, baseValues}) => {
                 data
             }).then((x)=>{
                 if(x.data.status=='success'){
-                    let tempRecords = [...state.records];
-                    tempRecords.unshift(x.data.result);
-                    dispatch({type:'toggle', fieldName:'records', payload:tempRecords});
-                    dispatch({type:'modalOff'});
-                    reset(baseValues)
-                    openNotification('Success', `Vendor ${x.data.result.name} Created!`, 'green')
+                    openNotification('Success', `Vendor ${x.data.result.name} Created!`, 'green');
+                    Router.push(`/setup/vendor/${x.data.result.id}`)
                 }else{
                     openNotification('Error', `An Error occured Please Try Again!`, 'red')
                 }
@@ -86,37 +80,32 @@ const CreateOrEdit = ({state, dispatch, baseValues}) => {
     };
 
     const onEdit = async(data) => {
-        console.log(oldRecord.accountRepresentatorId)
         console.log(data.accountRepresentatorId)
         let history = "";
         let EmployeeId = Cookies.get('loginId');
         let updateDate = moment().format('MMM Do YY, h:mm:ss a');
-        history = await createHistory(Representatives, oldRecord, data, company);
-        console.log(history)
+        //history = await createHistory(Representatives, oldRecord, data, company);
+        //console.log(history)
         dispatch({type:'toggle', fieldName:'load', payload:true});
         setTimeout(async() => {
             await axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_EDIT_VENDOR,{
                 data, history, EmployeeId, updateDate
             }).then((x)=>{
                 if(x.data.status=='success'){
-                    let tempRecords = [...state.records];
-                    let i = tempRecords.findIndex((y=>data.id==y.id));
-                    tempRecords[i] = x.data.result;
-                    dispatch({type:'toggle', fieldName:'records', payload:tempRecords});
-                    dispatch({type:'modalOff'});
-                    reset(baseValues)
                     openNotification('Success', `Vendor ${data.name} Updated!`, 'green')
-                } else { openNotification('Error', `An Error occured Please Try Again!`, 'red') }
+                } else { 
+                    openNotification('Error', `An Error occured Please Try Again!`, 'red') 
+                }
                 dispatch({type:'toggle', fieldName:'load', payload:false});
             })
         }, 3000);
     };
+    
     const onError = (errors) => console.log(errors);
 
     return (
     <div className='client-styles' style={{maxHeight:720, overflowY:'auto', overflowX:'hidden'}}>
-      <h6>{state.edit?'Edit':'Create'}</h6>
-      <form onSubmit={handleSubmit(state.edit?onEdit:onSubmit, onError)}>
+      <form onSubmit={handleSubmit(id!=="new"?onEdit:onSubmit, onError)}>
       <Tabs defaultActiveKey="1">
         <Tabs.TabPane tab="Basic Info" key="1">
         <Row>

@@ -2,7 +2,7 @@ import { Row, Col, Table } from 'react-bootstrap';
 import React, { useEffect, useReducer } from 'react';
 import Router from 'next/router';
 import { HistoryOutlined } from '@ant-design/icons';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { incrementTab } from '/redux/tabs/tabSlice';
 import axios from 'axios';
 
@@ -45,16 +45,28 @@ function recordsReducer(state, action){
 }
 
 const initialState = {
-  records: []
+    records: [],
+    history:[],
+    // Editing Records
+    selectedRecord:{},
+    oldRecord:{},
 };
 
-const Client = ({sessionData, clientData}) => {
+const Vendor = ({sessionData, vendorData}) => {
+
+  useEffect(()=>{ if(sessionData.isLoggedIn==false) Router.push('/login') }, [sessionData]);
   const dispatchNew = useDispatch();
-  
-  useEffect(()=>{ if(sessionData.isLoggedIn==false){Router.push('/login');} setRecords(); }, [sessionData]);
 
   const [ state, dispatch ] = useReducer(recordsReducer, initialState);
   const { records } = state;
+
+  useEffect(() => {
+    setRecords();
+  }, [])
+
+  const setRecords = () => {
+    dispatch({type:'toggle', fieldName:'records', payload:vendorData.result});
+  }
 
   const getHistory = async(recordid,type) => {
     dispatch({type:'toggle', fieldName:'load', payload:true});
@@ -69,21 +81,18 @@ const Client = ({sessionData, clientData}) => {
     })
   }
 
-  const setRecords = () => {
-    dispatch({type:'toggle', fieldName:'records', payload:clientData.result});
-  }
-
   return (
     <div className='base-page-layout'>
     <Row>
-        <Col><h5>Clients</h5></Col>
-        <Col>
+      <Col><h5>Vendors</h5></Col>
+      <Col>
         <button className='btn-custom right' 
           onClick={()=>{
-            dispatchNew(incrementTab({"label":"Client","key":"2-7","id":"new"}));
-            Router.push(`/setup/client/new`);
-        }}>Create</button>
-        </Col>
+            dispatchNew(incrementTab({"label":"Vendor","key":"2-8","id":"new"}));
+            Router.push(`/setup/vendor/new`);
+          }}>Create
+        </button>
+      </Col>
     </Row>
     <hr className='my-2' />
     <Row style={{maxHeight:'69vh',overflowY:'auto', overflowX:'hidden'}}>
@@ -93,6 +102,7 @@ const Client = ({sessionData, clientData}) => {
         <thead>
           <tr>
             <th>Name</th>
+            <th>Type</th>
             <th>Contact Persons</th>
             <th>Telephones</th>
             <th>Address</th>
@@ -100,22 +110,36 @@ const Client = ({sessionData, clientData}) => {
           </tr>
         </thead>
         <tbody>
-        {records.map((x, index) => {
+        {
+          records.map((x, index) => {
           return (
           <tr key={index} className='f row-hov'
             onClick={()=>{
-              dispatchNew(incrementTab({"label":"Client","key":"2-7","id":x.id}));
-              Router.push(`/setup/client/${x.id}`);
+              dispatchNew(incrementTab({"label":"Vendor","key":"2-8","id":x.id}));
+              Router.push(`/setup/vendor/${x.id}`);
             }}
           >
-            <td> <span className='blue-txt fw-7'>{x.name}</span></td>
-            <td> {x.person1} {x.mobile1}<br/> {x.person2} {x.mobile2}<br/> </td>
-            <td> {x.telephone1}<br/>{x.telephone2}</td>
-            <td> {x.address1?.slice(0,30)}<br/> {x.address2?.slice(0,30)}<br/> </td>
+            <td className='blue-txt fw-7'>{x.name}</td>
+            <td>{x.types?.split(", ").map((z, i)=>{
+              return(<div key={i} className="party-types">{z}</div>)
+            })}</td>
             <td>
-              Created By: <span className='blue-txt fw-5'>{x.createdBy}</span> <br/>
+              {x.person1} {x.mobile1}<br/>
+              {x.person2} {x.mobile2}<br/>
+            </td>
+            <td>
+              {x.telephone1}<br/>
+              {x.telephone2}
+            </td>
+            <td>
+              {x.address1.slice(0,30)}<br/>
+              {x.address2.slice(0,30)}<br/>
+            </td>
+            <td>
+              Created By: <span className='blue-txt fw-5'>{x.createdBy}</span>
+              <br/>
               <span className='' style={{position:'relative', top:2}}>Load History</span>
-              <HistoryOutlined onClick={()=>getHistory(x.id,'client')} className='modify-edit mx-2' />
+              <HistoryOutlined onClick={()=>getHistory(x.id,'vendor')} className='modify-edit mx-2' />
             </td>
           </tr>
           )
@@ -129,4 +153,4 @@ const Client = ({sessionData, clientData}) => {
   )
 }
 
-export default Client
+export default Vendor

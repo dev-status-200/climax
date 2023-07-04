@@ -3,14 +3,14 @@ import Client from '/Components/Layouts/Setup/Client';
 import axios from 'axios';
 import Cookies from 'cookies';
 
-const clients = ({sessionData, representativeData, clientData}) => {
+const clientList = ({sessionData, representativeData, clientData}) => {
   return (
     <div>
       <Client sessionData={sessionData} representativeData={representativeData} clientData={clientData} />
     </div>
   )
 }
-export default clients;
+export default clientList;
 
 export async function getServerSideProps({req,res}){
   const cookies = new Cookies(req, res)

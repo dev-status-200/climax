@@ -14,6 +14,7 @@ import Cookies from 'js-cookie';
 import openNotification from '/Components/Shared/Notification';
 import { useSelector } from 'react-redux';
 import { createHistory } from './historyCreation';
+import Router from 'next/router';
 
 const SignupSchema = yup.object().shape({
     // code: yup.string().required('Required'),
@@ -38,7 +39,7 @@ const SignupSchema = yup.object().shape({
     operations: yup.array().required('Atleast 1 Operation Required!').min(1, "Atleast 1 Operation Required!"),
 });
 
-const CreateOrEdit = ({state, dispatch, baseValues}) => {
+const CreateOrEdit = ({state, dispatch, baseValues, clientData, id}) => {
   
     const company = useSelector((state) => state.company.companies);
     const { register, control, handleSubmit, reset, formState: { errors } } = useForm({
@@ -48,15 +49,15 @@ const CreateOrEdit = ({state, dispatch, baseValues}) => {
     const { oldRecord, Representatives } = state;
 
     useEffect(() => {
-        if(state.edit){
-            let tempState = {...state.selectedRecord};
+        if(id!="new"){
+            let tempState = {...clientData};
             let tempCompanyList = [...state.editCompanyList];
             tempState.operations = tempState.operations.split(', ');
             tempState.types = tempState.types.split(', ');
             tempState.registerDate = moment(tempState.registerDate);
             tempState.bankAuthorizeDate = moment(tempState.bankAuthorizeDate);
             tempState.companies = [];
-            state.selectedRecord.Client_Associations.forEach((x)=>{ tempState.companies.push(x.CompanyId) })
+            clientData.Client_Associations.forEach((x)=>{ tempState.companies.push(x.CompanyId) })
             tempCompanyList.forEach((x, i)=>{
                 for(let j=0; j<tempState.Client_Associations.length; j++){
                     if(tempState.Client_Associations[j].CompanyId==x.value){
@@ -71,8 +72,8 @@ const CreateOrEdit = ({state, dispatch, baseValues}) => {
             dispatch({type:'toggle', fieldName:'oldRecord', payload:tempState});
             reset(tempState);
         }
-        if(!state.edit){ reset(baseValues) }
-    }, [state.selectedRecord])
+        if(id=="new"){ reset(baseValues) }
+    }, [])
 
     const onSubmit = async(data) => {
         let Username = Cookies.get('username')
@@ -83,13 +84,8 @@ const CreateOrEdit = ({state, dispatch, baseValues}) => {
                 data
             }).then((x)=>{
                 if(x.data.status=='success'){
-                    let tempRecords = [...state.records];
-                    tempRecords.unshift(x.data.result);
-                    console.log(x.data.result)
-                    dispatch({type:'toggle', fieldName:'records', payload:tempRecords});
-                    dispatch({type:'modalOff'});
-                    reset(baseValues)
-                    openNotification('Success', `Client ${x.data.result.name} Created!`, 'green')
+                    openNotification('Success', `Client ${x.data.result.name} Created!`, 'green');
+                    Router.push(`/setup/client/${x.data.result.id}`);
                 }else{
                     openNotification('Error', `An Error occured Please Try Again!`, 'red')
                 }
@@ -113,12 +109,6 @@ const CreateOrEdit = ({state, dispatch, baseValues}) => {
                 data, history, EmployeeId, updateDate
             }).then((x)=>{
                 if(x.data.status=='success'){
-                    let tempRecords = [...state.records];
-                    let i = tempRecords.findIndex((y=>data.id==y.id));
-                    tempRecords[i] = x.data.result;
-                    dispatch({type:'toggle', fieldName:'records', payload:tempRecords});
-                    dispatch({type:'modalOff'});
-                    reset(baseValues)
                     openNotification('Success', `Client ${data.name} Updated!`, 'green')
                 } else { openNotification('Error', `An Error occured Please Try Again!`, 'red') }
                 dispatch({type:'toggle', fieldName:'load', payload:false});
@@ -138,7 +128,7 @@ const CreateOrEdit = ({state, dispatch, baseValues}) => {
     return (
     <div className='client-styles' style={{maxHeight:720, overflowY:'auto', overflowX:'hidden'}}>
       <h6>{state.edit?'Edit':'Create'}</h6>
-      <form onSubmit={handleSubmit(state.edit?onEdit:onSubmit, onError)}>
+      <form onSubmit={handleSubmit(id!="new"?onEdit:onSubmit, onError)}>
       <Tabs defaultActiveKey="1">
         <Tabs.TabPane tab="Basic Info" key="1">
         <Row>

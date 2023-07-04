@@ -1,6 +1,6 @@
 import { CloseOutlined } from '@ant-design/icons';
 import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
-import { companySelect, addCompanies } from '../../redux/company/companySlice';
+import { companySelect, addCompanies } from '/redux/company/companySlice';
 import { useSelector, useDispatch } from 'react-redux';
 import React, { useState, useEffect } from 'react';
 import { Layout, Menu, Select } from 'antd';
@@ -47,21 +47,28 @@ const MainLayout = ({children}) => {
   };
 
   useEffect(() => {
-     // when visiting pages inside folders the initial path in url confilts, so to this is mandatory for resolving it
-     if(
-        newRouter.pathname.includes("seJob/") &&  
-        !newRouter.pathname.includes("seJob/seJobList") && 
-        !newRouter.pathname.includes("seJob/seBlList")
+    // when visiting pages inside folders the initial path in url confilts, so to this is mandatory for resolving it
+    if(
+      newRouter.pathname.includes("seJob/") &&  
+      !newRouter.pathname.includes("seJob/seJobList") && 
+      !newRouter.pathname.includes("seJob/seBlList")
     ){
       setToggleState('4-3');
     }
-    if(
-      newRouter.pathname.includes("seJob/bl/")
-    ){
+    if(newRouter.pathname.includes("seJob/bl/")){
       setToggleState('4-4');
     }
     if(newRouter.pathname.includes("accounts/vouchers/")){
       setToggleState('3-5');
+    }
+    if(newRouter.pathname.includes("setup/client") && !newRouter.pathname.includes("setup/clientList")){
+      setToggleState('2-7');
+    }
+    if(newRouter.pathname.includes("setup/vendor") && !newRouter.pathname.includes("setup/vendorList")){
+      setToggleState('2-8');
+    }
+    if(newRouter.pathname.includes("setup/voyage")){
+      setToggleState('2-4');
     }
   }, [newRouter])
 
@@ -71,9 +78,11 @@ const MainLayout = ({children}) => {
   const [tabActive, setTabActive] = useState({
     home:false,
     employee:false,
-    clients:false,
+    clientList:false,
+    client:false,
     accounts:false,
     history:false,
+    vendorList:false,
     vendor:false,
     commodity:false,
     voyage:false,
@@ -103,14 +112,17 @@ const MainLayout = ({children}) => {
         }
       })
       if(cancel==false){
-        tempTabs.push(tabs)
+        tempTabs.push(tabs);
+        console.log(tabs.key)
         let tempTabActive = {...tabActive};
         if(tabs.key=='1-1'){ tempTabActive.home=true }
         else if(tabs.key=='2-1'){ tempTabActive.employee=true }
-        else if(tabs.key=='2-2'){ tempTabActive.clients=true }
+        else if(tabs.key=='2-2'){ tempTabActive.clientList=true }
+        else if(tabs.key=='2-7'){ tempTabActive.client=true }
         else if(tabs.key=='2-3'){ tempTabActive.commodity=true }
         else if(tabs.key=='2-4'){ tempTabActive.voyage=true }
-        else if(tabs.key=='2-5'){ tempTabActive.vendor=true }
+        else if(tabs.key=='2-5'){ tempTabActive.vendorList=true }
+        else if(tabs.key=='2-8'){ tempTabActive.vendor=true }
         else if(tabs.key=='2-6'){ tempTabActive.charges=true }
         else if(tabs.key=='3-1'){ tempTabActive.accounts=true }
         else if(tabs.key=='3-3'){ tempTabActive.invoiceBills=true }
@@ -159,21 +171,23 @@ const MainLayout = ({children}) => {
     setToggleState(x.key);
     if(x.key=='1-1'){ Router.push('/home') }
     else if(x.key=='2-1'){ Router.push('/employees') }
-    else if(x.key=='2-2'){ Router.push('/client') }
+    else if(x.key=='2-2'){ Router.push('/setup/clientList') }
+    else if(x.key=='2-7'){ Router.push(`/setup/client/${setKey(x)}`) } //these routes are also settled in 2nd useEffect
     else if(x.key=='2-3'){ Router.push('/commodity') }
     else if(x.key=='2-4'){ Router.push('/setup/voyage') }
-    else if(x.key=='2-5'){ Router.push('/vendor') }
+    else if(x.key=='2-5'){ Router.push('/setup/vendorList') }
+    else if(x.key=='2-8'){ Router.push(`/setup/vendor/${setKey(x)}`) } //these routes are also settled in 2nd useEffect
     else if(x.key=='2-6'){ Router.push('/charges') }
     else if(x.key=='3-1'){ Router.push('/accounts/chartOfAccount') }
     else if(x.key=='3-2'){ Router.push('/accounts/accountActivity') }
     else if(x.key=='3-3'){ Router.push('/accounts/invoiceAndBills') }
     else if(x.key=='3-4'){ Router.push('/accounts/paymentReceipt') }
-    else if(x.key=='3-5'){ Router.push(`/accounts/vouchers/${setKey(x)}`)}
+    else if(x.key=='3-5'){ Router.push(`/accounts/vouchers/${setKey(x)}`)} //these routes are also settled in 2nd useEffect
     else if(x.key=='3-6'){ Router.push('/accounts/voucherList') }
     else if(x.key=='4-1'){ Router.push('/seJob/seJobList') }
     else if(x.key=='4-2'){ Router.push('/seJob/seBlList') }
-    else if(x.key=='4-3'){ Router.push(`/seJob/${setKey(x)}`) }
-    else if(x.key=='4-4'){ Router.push(`/seJob/bl/${setKey(x)}`) }
+    else if(x.key=='4-3'){ Router.push(`/seJob/${setKey(x)}`) } //these routes are also settled in 2nd useEffect
+    else if(x.key=='4-4'){ Router.push(`/seJob/bl/${setKey(x)}`) } //these routes are also settled in 2nd useEffect
     else if(x.key=='5-1'){ Router.push('/reports/jobBalancing') }
     else if(x.key=='5-2'){ Router.push('/reports/accountActivity') }
     else if(x.key=='5-3'){ Router.push('/reports/balanceSheet') }

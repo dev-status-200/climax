@@ -20,10 +20,19 @@ const BookingInfo = ({register, control, errors, state, useWatch, dispatch, rese
 
   const dispatchNew = useDispatch();
   const transportCheck = useWatch({control, name:"transportCheck"});
+  const transporterId = useWatch({control, name:"transporterId"});
   const customCheck = useWatch({control, name:"customCheck"});
+  const customAgentId = useWatch({control, name:"customAgentId"});
   const approved = useWatch({control, name:"approved"});
   const vesselId = useWatch({control, name:"vesselId"});
   const VoyageId = useWatch({control, name:"VoyageId"});
+  const ClientId = useWatch({control, name:"ClientId"});
+  const shipperId = useWatch({control, name:"shipperId"});
+  const consigneeId = useWatch({control, name:"consigneeId"});
+  const overseasAgentId = useWatch({control, name:"overseasAgentId"});
+  const forwarderId = useWatch({control, name:"forwarderId"});
+  const shippingLineId = useWatch({control, name:"shippingLineId"});
+  const localVendorId = useWatch({control, name:"localVendorId"});
 
   const filterVessels = (list) => {
     let result = [];
@@ -35,7 +44,7 @@ const BookingInfo = ({register, control, errors, state, useWatch, dispatch, rese
   const getStatus = (val) => {
     return val[0]=="1"?true:false
   };
-  
+
   function getWeight(){
     let weight = 0.0, teu = 0, qty = 0;
     state.equipments.forEach((x) => {
@@ -60,6 +69,27 @@ const BookingInfo = ({register, control, errors, state, useWatch, dispatch, rese
     return result
   }
   const Space = () => <div className='mt-2'/>
+
+  const pageLinking = (type, value) => {
+    let route= "";
+    let obj = {}
+    if(type=="client"){
+      route=`/setup/client/${(value!="" && value!==null)?value:"new"}`
+      obj={"label":"Client", "key":"2-7", "id":(value!="" && value!==null)?value:"new"}
+
+    }else if(type=="vendor"){
+      route=`/setup/vendor/${(value!="" && value!==null)?value:"new"}`
+      obj={"label":"Vendor", "key":"2-8", "id":(value!="" && value!==null)?value:"new"}
+      
+    }else if(type="vessel"){
+      route=`/setup/voyage/`
+      obj={"label":"Voyages", "key":"2-4"}
+    }
+    //dispatchNew(incrementTab({ "label":label, "key":key, "id":(value!="" && value!==null)?value:"new" }));
+    dispatchNew(incrementTab(obj));
+    Router.push(route);
+  }
+
   return (
   <>
     <Row>
@@ -170,12 +200,15 @@ const BookingInfo = ({register, control, errors, state, useWatch, dispatch, rese
     </Row>
     <hr className='my-1' />
     <Row>
-      <Col md={3} className=''><Space/>
-        <SelectSearchComp register={register} name='ClientId' control={control} label='Client *' disabled={getStatus(approved)} width={"100%"}
-          options={state.fields.party.client} /><Space/>
-        <SelectSearchComp register={register} name='shipperId' control={control} label='Shipper *' disabled={getStatus(approved)} width={"100%"}
+      <Col md={3} className=''>
+        <div className='custom-link mt-2' onClick={()=>pageLinking("client", ClientId)} >Client *</div>
+        <SelectSearchComp register={register} name='ClientId' control={control} label='' disabled={getStatus(approved)} width={"100%"}
+          options={state.fields.party.client} />
+        <div className='custom-link mt-2' onClick={()=>pageLinking("client", shipperId)} >Shipper *</div>
+        <SelectSearchComp register={register} name='shipperId' control={control} label='' disabled={getStatus(approved)} width={"100%"}
           options={state.fields.party.shipper} /><Space/>
-        <SelectSearchComp register={register} name='consigneeId' control={control} label='Consignee' disabled={getStatus(approved)} width={"100%"}
+        <div className='custom-link mt-2' onClick={()=>pageLinking("client", consigneeId)} >Consignee *</div>
+        <SelectSearchComp register={register} name='consigneeId' control={control} label='' disabled={getStatus(approved)} width={"100%"}
           options={state.fields.party.consignee} /><Space/>
         <SelectSearchComp register={register} name='pol' control={control} label='Port Of Loading' disabled={getStatus(approved)} width={"100%"}
           options={ports.ports} /><Space/>
@@ -183,18 +216,25 @@ const BookingInfo = ({register, control, errors, state, useWatch, dispatch, rese
           options={ports.ports} /><Space/>
         <SelectSearchComp register={register} name='fd' control={control} label='Final Destination *' disabled={getStatus(approved)} width={"100%"}
           options={ports.ports} /><Space/>
-        <SelectSearchComp register={register} name='forwarderId' control={control} label='Forwarder/Coloader' disabled={getStatus(approved)} width={"100%"}
+        <div className='custom-link mt-2' onClick={()=>pageLinking("vendor", forwarderId)} >Forwarder/Coloader *</div>
+        <SelectSearchComp register={register} name='forwarderId' control={control} label='' disabled={getStatus(approved)} width={"100%"}
           options={state.fields.vendor.forwarder} /><Space/>
         <SelectSearchComp register={register} name='salesRepresentatorId' control={control} label='Sales Representator' disabled={getStatus(approved)}
           options={state.fields.sr} width={"100%"} />
       </Col>
       <Col md={3}><Space/>
-        <SelectSearchComp register={register} name='overseasAgentId' control={control} label='Overseas Agent' disabled={getStatus(approved)}options={state.fields.vendor.overseasAgent} width={"100%"} />
-        <Space/><SelectSearchComp register={register} name='localVendorId' control={control} label='Local Vendor' disabled={getStatus(approved)}options={state.fields.vendor.localVendor} width={"100%"} />
-        <Space/><SelectSearchComp register={register} name='shippingLineId' control={control} label='Sline/Carrier' disabled={getStatus(approved)}options={state.fields.vendor.sLine} width={"100%"} />
+        <div className='custom-link mt-2' onClick={()=>pageLinking("vendor", overseasAgentId)} >Overseas Agent *</div>
+        <SelectSearchComp register={register} name='overseasAgentId' control={control} label='' disabled={getStatus(approved)}options={state.fields.vendor.overseasAgent} width={"100%"} />
+        
+        <div className='custom-link mt-2' onClick={()=>pageLinking("vendor", localVendorId)} >Local Vendor *</div>
+        <SelectSearchComp register={register} name='localVendorId' control={control} label='' disabled={getStatus(approved)}options={state.fields.vendor.localVendor} width={"100%"} />
+        
+        <div className='custom-link mt-2' onClick={()=>pageLinking("vendor", shippingLineId)} >Sline/Carrier</div>
+        <SelectSearchComp register={register} name='shippingLineId' control={control} label='' disabled={getStatus(approved)}options={state.fields.vendor.sLine} width={"100%"} />
         <div className='px-2 pb-2 mt-3' style={{border:'1px solid silver'}}>
-        <Space/>
-        <SelectSearchComp register={register} name='vesselId' control={control} label='Vessel *'disabled={getStatus(approved)} width={"100%"}
+        
+        <div className='custom-link mt-2' onClick={()=>pageLinking("vessel")} >Vessel *</div>
+        <SelectSearchComp register={register} name='vesselId' control={control} label=''disabled={getStatus(approved)} width={"100%"}
           options={filterVessels(state.fields.vessel)} 
         />
           <div className='mt-2'>Voyage *</div>
@@ -222,15 +262,32 @@ const BookingInfo = ({register, control, errors, state, useWatch, dispatch, rese
       </Col>
       <Col md={3}><Space/>
       <SelectSearchComp register={register} name='commodityId' control={control} label='Commodity *' disabled={getStatus(approved)} width={"100%"}
-          options={state.fields.commodity} />
-          <div className='my-2' />
-        <CheckGroupComp register={register} name='transportCheck' control={control} label='' disabled={getStatus(approved)} 
-          options={[{ label:"Transport", value:"Transport" }]} />
+        options={state.fields.commodity} 
+      />
+        <div className='mt-2' />
+        <Row>
+        <Col md={1}>
+          <CheckGroupComp register={register} name='transportCheck' control={control} label='' disabled={getStatus(approved)} 
+          options={[{ label:"", value:"Transport" }]} />
+        </Col>
+        <Col md={3}>
+          <div className='custom-link' onClick={()=>pageLinking("vendor", transporterId)} >Transport</div>
+        </Col>
+        <Col>.</Col>
+        </Row>
         <SelectSearchComp register={register} name='transporterId' control={control} label='' 
           options={state.fields.vendor.transporter} disabled={getStatus(approved) || transportCheck[0]!='Transport'} width={"100%"} />
         <div className='mt-2'></div>
-        <CheckGroupComp register={register} name='customCheck' control={control} label='' disabled={getStatus(approved)} 
-          options={[{ label: "Custom Clearance", value: "Custom Clearance" }]} />
+        <Row>
+          <Col md={1}>
+            <CheckGroupComp register={register} name='customCheck' control={control} label='' disabled={getStatus(approved)} 
+            options={[{ label:"", value: "Custom Clearance" }]} />
+          </Col>
+          <Col md={6}>
+            <div className='custom-link' onClick={()=>pageLinking("vendor", customAgentId)} >Custom Clearance</div>
+          </Col>
+          <Col>.</Col>
+        </Row>
         <SelectSearchComp register={register} name='customAgentId' control={control} label='' width={"100%"}
           options={state.fields.vendor.chaChb} disabled={getStatus(approved) || customCheck[0]!='Custom Clearance'} />
         <div style={{marginTop:20}}></div>

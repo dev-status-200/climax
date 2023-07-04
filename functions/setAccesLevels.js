@@ -21,13 +21,13 @@ function setAccesLevels(dispatch, collapsed){
         key: '2-1',
         children: `Content of Tab Pane 2`,
       }),
-      getItem('Clients', '2-2',<></>, null, {
-        label: `Clients`,
+      getItem('Client List', '2-2',<></>, null, {
+        label: `Client List`,
         key: '2-2',
         children: `Content of Tab Pane 2`,
       }),
-      getItem('Vendor', '2-5',<></>, null, {
-        label: `Vendor`,
+      getItem('Vendor List', '2-5',<></>, null, {
+        label: `Vendor List`,
         key: '2-5',
         children: `Content of Tab Pane 2`,
       }),
