@@ -167,18 +167,20 @@ function setAccesLevels(dispatch, collapsed){
     
     obj.accounts?
     items = [
+      se,
       accounts,
       reports
     ]:null
     obj.admin?
       items = [
-        dashboard,
+        //dashboard,
         setup,
         accounts,
         se,
         reports
     ]:null
     Cookies.set("permissions", JSON.stringify(obj));
+    items.unshift(dashboard)
     return items
 }
 

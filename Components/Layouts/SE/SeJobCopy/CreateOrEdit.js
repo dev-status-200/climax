@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Tabs } from "antd";
 import { useForm, useWatch } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -16,11 +16,13 @@ import ChargesComp from './ChargesComp/'
 import LoadingProgram from './Loading Program';
 
 const CreateOrEdit = ({state, dispatch, baseValues, companyId, jobData}) => {
-
-  const {register, control, handleSubmit, reset, formState:{errors} } = useForm({
+  
+  const {register, control, handleSubmit, reset, formState:{errors}, watch } = useForm({
     resolver:yupResolver(SignupSchema), defaultValues:state.values
   });
+  const approved = useWatch({control, name:"approved"});
   const subType = useWatch({control, name:"subType"});
+  const [check, setCheck] = useState(state.selectedRecord.approved == 1 ? true : false);
 
   useEffect(() => {
     if(state.edit){
@@ -91,6 +93,7 @@ const CreateOrEdit = ({state, dispatch, baseValues, companyId, jobData}) => {
     let loginId = Cookies.get('loginId');
     data.createdById = loginId;
     dispatch({type:'toggle', fieldName:'load', payload:true});
+    console.log(data.approved)
     setTimeout(async() => {
         await axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_CREATE_SEAJOB,{
           data
@@ -106,6 +109,7 @@ const CreateOrEdit = ({state, dispatch, baseValues, companyId, jobData}) => {
   };
 
   const onEdit = async(data) => {
+    console.log(data.approved)
     data.equipments = state.equipments
     data.customAgentId = data.customCheck.length>0?data.customAgentId:null;
     data.transporterId = data.transportCheck.length>0?data.transporterId:null;
@@ -121,8 +125,8 @@ const CreateOrEdit = ({state, dispatch, baseValues, companyId, jobData}) => {
     data.localVendorId = data.localVendorId!=""?data.localVendorId:null;
     data.commodityId = data.commodityId!=""?data.commodityId:null;
     data.shippingLineId = data.shippingLineId!=""?data.shippingLineId:null;
-    data.approved = data.approved[0]=="1"?true:false;
     data.companyId = companyId;
+  
     dispatch({type:'toggle', fieldName:'load', payload:true});
     setTimeout(async() => {
         await axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_EDIT_SEAJOB,{data}).then((x)=>{
@@ -145,7 +149,7 @@ const CreateOrEdit = ({state, dispatch, baseValues, companyId, jobData}) => {
     <Tabs defaultActiveKey={state.tabState} activeKey={state.tabState}
      onChange={(e)=> dispatch({type:'toggle', fieldName:'tabState', payload:e}) }>
       <Tabs.TabPane tab="Booking Info" key="1"> 
-       <BookingInfo control={control} register={register} errors={errors} state={state} useWatch={useWatch} dispatch={dispatch} reset={reset}  />   
+       <BookingInfo handleSubmit={handleSubmit} onEdit={onEdit} companyId={companyId} approved={approved} check={check} setCheck={setCheck} watch={watch} control={control} register={register} errors={errors} state={state} useWatch={useWatch} dispatch={dispatch} reset={reset}  />   
       </Tabs.TabPane>
       {subType=="FCL" &&
       <Tabs.TabPane tab="Equipment" key="2">

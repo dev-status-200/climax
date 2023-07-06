@@ -510,6 +510,8 @@
   animation: spin 0.6s linear infinite;
 }
 
+
+
 @keyframes spin {
   from {
     transform: rotate(0turn);
@@ -533,4 +535,28 @@ div.rc-virtual-list > div.rc-virtual-list-holder > div > div{
 .custom-link{
   color: #007bff;
   cursor: pointer;
+}
+
+.notificationSide {
+  height: 780px;
+  overflow-y: scroll;
+  background: rgba(0,0,0,0.05);
+  flex: 0.5; 
+  padding: 1rem;
+   display: flex;
+  flex-direction: column;
+  align-items: start
+}
+
+.notifications {
+
+  width : 450px;
+  box-shadow: 10px 10px 20px 0px rgba(0,0,0,0.25);
+  cursor: pointer;
+  transition: all .3s ease-in-out;
+}
+
+.notifications:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  color: #000000 !important;
 }
