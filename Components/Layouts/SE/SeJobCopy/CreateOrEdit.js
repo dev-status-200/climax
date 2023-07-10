@@ -144,41 +144,41 @@ const CreateOrEdit = ({state, dispatch, baseValues, companyId, jobData}) => {
 
   return(
   <div className='client-styles' style={{overflowY:'auto', overflowX:'hidden'}}>
-    <h6>{state.edit?'Edit':'Create'}</h6>
-    <form onSubmit={handleSubmit(state.edit?onEdit:onSubmit, onError)}>
-    <Tabs defaultActiveKey={state.tabState} activeKey={state.tabState}
-     onChange={(e)=> dispatch({type:'toggle', fieldName:'tabState', payload:e}) }>
+      <h6>{state.edit?'Edit':'Create'}</h6>
+      <form onSubmit={handleSubmit(state.edit?onEdit:onSubmit, onError)}>
+      <Tabs defaultActiveKey={state.tabState} activeKey={state.tabState}
+      onChange={(e)=> dispatch({type:'toggle', fieldName:'tabState', payload:e}) }>
       <Tabs.TabPane tab="Booking Info" key="1"> 
-       <BookingInfo handleSubmit={handleSubmit} onEdit={onEdit} companyId={companyId} approved={approved} check={check} setCheck={setCheck} watch={watch} control={control} register={register} errors={errors} state={state} useWatch={useWatch} dispatch={dispatch} reset={reset}  />   
+      <BookingInfo handleSubmit={handleSubmit} onEdit={onEdit} companyId={companyId} approved={approved} check={check} setCheck={setCheck} watch={watch} control={control} register={register} errors={errors} state={state} useWatch={useWatch} dispatch={dispatch} reset={reset}  />   
       </Tabs.TabPane>
       {subType=="FCL" &&
       <Tabs.TabPane tab="Equipment" key="2">
-        <EquipmentInfo control={control} register={register} errors={errors} state={state} dispatch={dispatch} useWatch={useWatch}/>
+      <EquipmentInfo control={control} register={register} errors={errors} state={state} dispatch={dispatch} useWatch={useWatch}/>
       </Tabs.TabPane>
       }
       <Tabs.TabPane tab="Routing" key="3">
-        <Routing control={control} register={register} errors={errors} state={state} useWatch={useWatch} />
+      <Routing control={control} register={register} errors={errors} state={state} useWatch={useWatch} />
       </Tabs.TabPane >
       {state.edit &&
       <Tabs.TabPane tab="Charges" key="4">
-        <ChargesComp state={state} dispatch={dispatch} />
+      <ChargesComp state={state} dispatch={dispatch} />
       </Tabs.TabPane>
       }
       {(state.selectedInvoice!='') &&
       <Tabs.TabPane tab="Invoice / Bills" key="5">
-        <Invoice state={state} dispatch={dispatch} companyId={companyId} />
+      <Invoice state={state} dispatch={dispatch} companyId={companyId} />
       </Tabs.TabPane>
       }
-    {(state.loadingProgram!='') &&
+      {(state.loadingProgram!='') &&
       <Tabs.TabPane tab="Loading Program" key="6">
-        <LoadingProgram state={state} dispatch={dispatch} companyId={companyId} jobData={jobData} />
+      <LoadingProgram state={state} dispatch={dispatch} companyId={companyId} jobData={jobData} />
       </Tabs.TabPane>
       }
-    </Tabs>
+      </Tabs>
       {(state.tabState!="4" && state.tabState!="5" && state.tabState!="6") &&
       <>
       <button type="submit" disabled={state.load?true:false} className='btn-custom mt-3'>
-        {state.load?<Spinner animation="border" size='sm' className='mx-3' />:'Save Job'}
+      {state.load?<Spinner animation="border" size='sm' className='mx-3' />:'Save Job'}
       </button>
       </>
       }

@@ -16,9 +16,9 @@ const [notes, setNotes] = useState([])
     return (
     <div className="notificationSide">
     <h5>Notes</h5>
-    {notes.map((x) => {
+    {notes.map((x, i) => {
     return (
-    <div  
+    <div key={i} 
     onClick={() => {
     dispatch(incrementTab({"label": "SE JOB","key": "4-3","id":x.recordId}))
     Router.push(`/seJob/${x.recordId}`)}}

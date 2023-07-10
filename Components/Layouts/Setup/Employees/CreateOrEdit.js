@@ -210,6 +210,8 @@ return(
             <Select.Option value='cfo'>CEO</Select.Option>
             <Select.Option value='ceo'>CFO</Select.Option>
             <Select.Option value='admin'>Admin</Select.Option>
+            <Select.Option value='rider'>Rider</Select.Option>
+
           </Select.OptGroup>
         </Select>
         </Form.Item>

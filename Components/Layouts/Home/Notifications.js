@@ -5,13 +5,12 @@ import { updateNotification } from '../../../functions/notifications';
 const Notifications = ({dispatch, incrementTab, Router,  moment}) => {
 const [notifications, setNotifications] = useState([]);
 
-    useEffect(() => {
-    const req = async () => {
-    const result = await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_NOTIFICATION)
-    .then((x) => {setNotifications(x.data.result)})};
-    req();
-    }, 
-    []);
+useEffect(() => {
+  setTimeout(async() => {
+    await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_NOTIFICATION).then((x) => setNotifications(x.data.result))
+  }, 3000)
+}, []);
+console.log({notifications})
 
     const update = async(x) =>{
     const data = {opened: 1, subType:x.subType}
@@ -21,9 +20,9 @@ const [notifications, setNotifications] = useState([]);
     return (
     <div className="notificationSide">
     <h5>Notifications</h5>
-    {notifications?.map((x) => {
+    {notifications?.map((x, i) => {
     return (
-    <div  
+    <div key={i} 
     onClick={() => {
     update(x)    
     dispatch(incrementTab({"label": "SE JOB","key": "4-3","id":x.recordId}))

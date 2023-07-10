@@ -392,8 +392,8 @@ const BookingInfo = ({handleSubmit, onEdit, companyId, check, approved, setCheck
         </button>
         <Popover
         content={
-          <>{state.InvoiceList?.map((x) => 
-            (<div className='my-1'>
+          <>{state.InvoiceList?.map((x, i) => 
+            (<div key={i} className='my-1'>
               <Tag color="geekblue" style={{fontSize:15, cursor:"pointer", width:130, textAlign:'center'}}
                 onClick={()=>{
                 dispatch({ type:'set',
